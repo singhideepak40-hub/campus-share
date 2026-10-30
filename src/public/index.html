@@ -41,7 +41,7 @@
       </div>
 
       <!-- Navigation Tabs (Fluid & Visible across all devices) -->
-      <nav class="flex items-center space-x-1 overflow-x-auto max-w-[60vw] md:max-w-none py-1 scrollbar-none" id="navTabs">
+      <nav class="flex items-center space-x-1 overflow-x-auto max-w-[55vw] md:max-w-none py-1 scrollbar-none" id="navTabs">
         <button onclick="switchView('discover')" id="nav-discover" class="nav-btn px-3 py-2 text-xs sm:text-sm font-semibold rounded-lg text-indigo-600 bg-indigo-50 border border-indigo-200 transition-all flex items-center space-x-1.5 whitespace-nowrap cursor-pointer">
           <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
           <span>Explore Inventory</span>
@@ -72,14 +72,16 @@
         </button>
       </nav>
 
-      <!-- Active User Profile Pill -->
-      <div class="flex items-center space-x-3 flex-shrink-0">
+      <!-- Active User Profile Pill (CLICKABLE -> OPENS AUTOMATED HISTORY MODAL) -->
+      <div onclick="openProfileHistoryModal()" title="Click to view your Automated Custody History, Credits & Badges" 
+           class="flex items-center space-x-3 flex-shrink-0 cursor-pointer p-1.5 pr-2.5 rounded-xl hover:bg-indigo-50/80 border border-slate-200/80 hover:border-indigo-300 transition-all group shadow-2xs">
         <div class="text-right hidden sm:block">
-          <div id="userBadgeName" class="text-xs font-bold text-slate-900">Arjun Sharma</div>
-          <div id="userBadgeRole" class="text-[10px] text-indigo-600 font-semibold uppercase tracking-wider">Student &bull; Tier 1 (New)</div>
+          <div id="userBadgeName" class="text-xs font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">Deepak Singhi</div>
+          <div id="userBadgeRole" class="text-[10px] text-indigo-600 font-semibold uppercase tracking-wider">Lead Researcher &bull; Tier 2</div>
         </div>
-        <div id="userAvatar" class="w-9 h-9 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-600 text-white font-bold text-sm flex items-center justify-center border-2 border-white shadow-sm ring-2 ring-indigo-200">
-          AS
+        <div id="userAvatar" class="w-9 h-9 rounded-full bg-gradient-to-tr from-indigo-600 to-purple-600 text-white font-bold text-xs sm:text-sm flex items-center justify-center border-2 border-white shadow-sm ring-2 ring-indigo-200 relative group-hover:scale-105 transition-transform">
+          DS
+          <span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-white"></span>
         </div>
       </div>
 
@@ -313,7 +315,7 @@
             <span>Token refreshes in:</span>
             <span id="qrCountdown" class="font-mono font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">18s</span>
           </div>
-          <p class="text-[11px] text-slate-400 mt-1">Screenshot protected &bull; Bound to Arjun Sharma's device ID</p>
+          <p class="text-[11px] text-slate-400 mt-1">Screenshot protected &bull; Bound to Deepak Singhi's device ID</p>
         </div>
 
         <!-- Pre-Operation Safety Checklist -->
@@ -752,7 +754,7 @@
         <div class="mt-6 border border-slate-200 rounded-xl p-4 bg-slate-50">
           <div class="flex items-center justify-between mb-2">
             <span class="text-xs font-bold text-slate-800">Explainable Allocation: Live "Why?" Card Sample</span>
-            <span class="text-[10px] font-mono text-indigo-600 font-bold">User: Arjun Sharma</span>
+            <span class="text-[10px] font-mono text-indigo-600 font-bold">User: Deepak Singhi</span>
           </div>
           <div class="p-3 bg-white rounded-lg border border-slate-200 text-xs text-slate-700 font-mono">
             <strong>Decision Rationale:</strong> Priority Score <strong>78.4</strong> beats competing candidate (64.2).<br>
@@ -823,6 +825,75 @@
 
   </main>
 
+  <!-- ================= AUTOMATED USER PROFILE & CUSTODY HISTORY MODAL ================= -->
+  <div id="profileHistoryModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-slate-200 flex flex-col max-h-[90vh] overflow-hidden space-y-4">
+      
+      <!-- Modal Top Header & Close -->
+      <div class="flex items-start justify-between pb-4 border-b border-slate-200">
+        <div class="flex items-center space-x-3.5">
+          <div id="modalUserAvatar" class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-600 to-purple-600 text-white font-extrabold text-base flex items-center justify-center shadow-md shadow-indigo-200">
+            DS
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <h3 id="modalUserName" class="text-base sm:text-lg font-bold text-slate-900">Deepak Singhi</h3>
+              <span id="modalTrustTierBadge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 uppercase font-mono">Tier 2 Standard</span>
+            </div>
+            <p id="modalUserRole" class="text-xs text-slate-500">Lead Researcher &bull; deepak.singhi@campus.edu</p>
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-2">
+          <!-- Live Credits Balance Pill -->
+          <div class="bg-indigo-50 border border-indigo-200 rounded-xl px-3 py-1.5 text-right hidden sm:block">
+            <span class="text-[9px] text-indigo-500 font-semibold uppercase tracking-wider block">Wallet Balance</span>
+            <span id="modalUserCredits" class="text-sm font-extrabold font-mono text-indigo-700">135 Credits</span>
+          </div>
+          <button onclick="closeProfileHistoryModal()" class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-500 font-bold flex items-center justify-center cursor-pointer transition-colors">&times;</button>
+        </div>
+      </div>
+
+      <!-- Quick Persona Switcher Bar inside Profile -->
+      <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+        <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Switch Team Member:</span>
+        <div class="flex items-center space-x-1.5 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0">
+          <button onclick="setPersona('deepak')" id="p-pill-deepak" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-indigo-600 text-white cursor-pointer shadow-xs">Deepak Singhi</button>
+          <button onclick="setPersona('sougata')" id="p-pill-sougata" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-white hover:bg-slate-200 text-slate-700 border border-slate-200 cursor-pointer">Sougata</button>
+          <button onclick="setPersona('pragyan')" id="p-pill-pragyan" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-white hover:bg-slate-200 text-slate-700 border border-slate-200 cursor-pointer">Pragyan</button>
+          <button onclick="setPersona('sharma')" id="p-pill-sharma" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-white hover:bg-slate-200 text-slate-700 border border-slate-200 cursor-pointer">Prof. Sharma</button>
+        </div>
+      </div>
+
+      <!-- Sub Tabs: Custody History vs Credits Ledger vs Badges -->
+      <div class="flex items-center space-x-2 border-b border-slate-200 pb-2">
+        <button onclick="switchProfileTab('history')" id="tab-btn-history" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-900 text-white cursor-pointer shadow-xs">
+          Automated Custody History
+        </button>
+        <button onclick="switchProfileTab('ledger')" id="tab-btn-ledger" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 bg-white hover:bg-slate-100 border border-slate-200 cursor-pointer">
+          Credits Ledger (<span id="ledgerCountBadge">6</span>)
+        </button>
+        <button onclick="switchProfileTab('badges')" id="tab-btn-badges" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 bg-white hover:bg-slate-100 border border-slate-200 cursor-pointer">
+          Verified Credentials
+        </button>
+      </div>
+
+      <!-- Tab Content Area (Scrollable) -->
+      <div class="overflow-y-auto max-h-[50vh] pr-1 space-y-3" id="profileTabContentArea">
+        <!-- Rendered dynamically via JS -->
+      </div>
+
+      <!-- Modal Bottom Actions -->
+      <div class="pt-3 border-t border-slate-200 flex items-center justify-between text-xs">
+        <span class="text-slate-400 font-mono text-[11px]">Cryptographically Signed &bull; Recency Half-Life 60d</span>
+        <button onclick="closeProfileHistoryModal()" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold cursor-pointer shadow-xs">
+          Close History
+        </button>
+      </div>
+
+    </div>
+  </div>
+
   <!-- ================= PERSISTENT FLOATING DEMO TOOLBAR ================= -->
   <div class="fixed bottom-3 left-1/2 -translate-x-1/2 w-[95%] max-w-4xl z-40 bg-slate-900/95 backdrop-blur-md text-white rounded-2xl border border-slate-700/80 shadow-2xl p-3 sm:p-4 transition-all">
     <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
@@ -830,17 +901,17 @@
       <!-- Persona Switcher -->
       <div class="flex items-center space-x-2 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
         <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mr-1 flex-shrink-0">Persona:</span>
-        <button onclick="setPersona('arjun')" id="btn-p-arjun" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-indigo-600 text-white whitespace-nowrap shadow-sm cursor-pointer">
-          Arjun (Student)
+        <button onclick="setPersona('deepak')" id="btn-p-deepak" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-indigo-600 text-white whitespace-nowrap shadow-sm cursor-pointer">
+          Deepak (Lead)
         </button>
-        <button onclick="setPersona('priya')" id="btn-p-priya" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 whitespace-nowrap cursor-pointer">
-          Priya (Trusted)
+        <button onclick="setPersona('sougata')" id="btn-p-sougata" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 whitespace-nowrap cursor-pointer">
+          Sougata (Trusted)
+        </button>
+        <button onclick="setPersona('pragyan')" id="btn-p-pragyan" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 whitespace-nowrap cursor-pointer">
+          Pragyan (Safety)
         </button>
         <button onclick="setPersona('sharma')" id="btn-p-sharma" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 whitespace-nowrap cursor-pointer">
           Prof. Sharma (Owner)
-        </button>
-        <button onclick="setPersona('mehta')" id="btn-p-mehta" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 whitespace-nowrap cursor-pointer">
-          Dr. Mehta (Safety)
         </button>
       </div>
 
@@ -1067,49 +1138,90 @@
     // --- APPLICATION STATE ---
     const initialAuditChainSeed = [
       { index: 1, timestamp: '2026-10-30 09:12:00', actor: 'Prof. Sharma', action: 'RESOURCE_REGISTERED', payload: 'Epilog Laser Cutter Bay 4' },
-      { index: 2, timestamp: '2026-10-30 10:30:14', actor: 'Arjun Sharma', action: 'BOOKING_REQUESTED', payload: 'Slot 14:00-16:00 Urgency:4' },
-      { index: 3, timestamp: '2026-10-30 11:05:22', actor: 'Dr. Mehta', action: 'REQUEST_APPROVED', payload: 'Priority score 78.4 verified' },
-      { index: 4, timestamp: '2026-10-30 14:02:18', actor: 'Arjun Sharma', action: 'CHECKIN_COMPLETED', payload: 'HMAC Token validated, 3 photos stored' }
+      { index: 2, timestamp: '2026-10-30 10:30:14', actor: 'Deepak Singhi', action: 'BOOKING_REQUESTED', payload: 'Slot 14:00-16:00 Urgency:4' },
+      { index: 3, timestamp: '2026-10-30 11:05:22', actor: 'Pragyan', action: 'REQUEST_APPROVED', payload: 'Priority score 78.4 verified' },
+      { index: 4, timestamp: '2026-10-30 14:02:18', actor: 'Deepak Singhi', action: 'CHECKIN_COMPLETED', payload: 'HMAC Token validated, 3 photos stored' }
     ];
 
     const APP_STATE = {
       activeView: 'discover',
-      currentPersonaKey: 'arjun',
+      currentPersonaKey: 'deepak',
+      currentProfileTab: 'history',
       currentDiffAngle: 'bed',
       claimCountdownSec: 0,
       claimTimerInterval: null,
       personas: {
-        arjun: {
-          name: 'Arjun Sharma',
-          role: 'Student • Tier 1 (New)',
-          initials: 'AS',
-          certifications: ['LAB_SAFETY_101'],
-          credits: 100,
-          hoursPast30d: 0.0
+        deepak: {
+          id: 'usr-deepak',
+          name: 'Deepak Singhi',
+          role: 'Lead Researcher • Tier 2',
+          initials: 'DS',
+          certifications: ['LAB_SAFETY_101', 'BASIC_ELECTRONICS'],
+          credits: 135,
+          hoursPast30d: 4.0,
+          history: [
+            { id: 'CS-2026-8891', resource: 'Epilog Fusion Pro 48 CO2 Laser Cutter', location: 'MakerWing Bay 4', time: 'Today 14:00 - 16:00', status: 'APPROVED', purpose: 'Precision cutting 5mm carbon-reinforced acrylic for drone chassis', hash: 'c2e4a6b8d0f2a4b6c8e0a2c4e6f8a0b2d4f6a8b0' },
+            { id: 'CS-2026-8104', resource: 'Rigol DS1054Z 100MHz Digital Oscilloscope', location: 'Circuit Lab 204', time: '3 days ago', status: 'RETURNED', purpose: 'SPI/I2C sensor protocol decoding & signal analysis', hash: '7a91fc104239841f32a76bc827982fec327e51c8' },
+            { id: 'CS-2026-7850', resource: 'Semiconductor Devices (S.M. Sze, 3rd Ed.)', location: 'Central Library Reserve', time: '8 days ago', status: 'CLOSED', purpose: 'Thesis literature review on bipolar junction transistors', hash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4' }
+          ],
+          ledger: [
+            { delta: '+100', reason: 'Campus Onboarding Research Grant', date: '45 days ago', balance: 100 },
+            { delta: '-4', reason: 'Rare Reserve Textbook 48h Rental', date: '8 days ago', balance: 96 },
+            { delta: '+20', reason: 'On-Time Pristine Condition Return Bonus', date: '6 days ago', balance: 116 },
+            { delta: '-10', reason: 'Oscilloscope 2-Hour Lab Session', date: '3 days ago', balance: 106 },
+            { delta: '+44', reason: 'Peer Safety SOP Review Incentive', date: 'Yesterday', balance: 150 },
+            { delta: '-15', reason: 'Reservation Escrow: Laser Cutter Bay 4', date: 'Today', balance: 135 }
+          ]
         },
-        priya: {
-          name: 'Priya Patel',
-          role: 'Student • Tier 3 (Trusted)',
-          initials: 'PP',
-          certifications: ['LAB_SAFETY_101', 'LASER_SAFETY_SOP', 'BASIC_ELECTRONICS'],
-          credits: 65,
-          hoursPast30d: 14.5
+        sougata: {
+          id: 'usr-sougata',
+          name: 'Sougata',
+          role: 'Robotics Lead • Tier 3 (Trusted)',
+          initials: 'SO',
+          certifications: ['LAB_SAFETY_101', 'LASER_SAFETY_SOP', 'BASIC_ELECTRONICS', 'CNC_CERT'],
+          credits: 180,
+          hoursPast30d: 14.5,
+          history: [
+            { id: 'CS-2026-8720', resource: 'Haas Mini Mill 5-Axis CNC Center', location: 'Precision Shop Bay 1', time: 'Yesterday 10:00 - 13:00', status: 'RETURNED', purpose: 'Aluminum 6061 planetary gearbox carrier machining', hash: '8f434346648f6b96df89dda901c5176b10a6d839' },
+            { id: 'CS-2026-8419', resource: 'Formlabs Form 3+ SLA Printer', location: 'Rapid Prototyping Bay 2', time: '5 days ago', status: 'CLOSED', purpose: 'Dental resin manifold prototype', hash: '5b1d3f5a7c9e1f3a5b7c9d1e3f5a7b9c1d3e5f7a' }
+          ],
+          ledger: [
+            { delta: '+150', reason: 'Departmental Fabrication Allocation', date: '120 days ago', balance: 150 },
+            { delta: '-30', reason: 'Haas 5-Axis CNC 3-Hour Reservation', date: 'Yesterday', balance: 120 },
+            { delta: '+60', reason: 'Rapid Prototyping Lab Assistance Reward', date: '3 days ago', balance: 180 }
+          ]
+        },
+        pragyan: {
+          id: 'usr-pragyan',
+          name: 'Pragyan',
+          role: 'Campus Safety Officer & Manager',
+          initials: 'PR',
+          certifications: ['ALL_PERMISSIONS', 'LAB_SAFETY_101', 'EHS_AUDITOR'],
+          credits: 450,
+          hoursPast30d: 2.0,
+          history: [
+            { id: 'CS-2026-8891', resource: 'Epilog Laser Cutter Bay 4', location: 'MakerWing Bay 4', time: 'Today 11:05', status: 'SUPERVISED', purpose: 'EHS Safety Checklist & Air Assist Optical Clearance Inspection', hash: 'b1d3f5a7c9e1f3a5b7c9d1e3f5a7b9c1d3e5f7a9' },
+            { id: 'CS-2026-8499', resource: 'Instron 5969 Tensile Tester', location: 'Materials Lab 102', time: '4 days ago', status: 'AUDITED', purpose: 'Annual load cell recalibration and safety interlock audit', hash: 'a2c4e6f8b0d2e4f6a8b1c3d5e7f9a1b3c5d7e9f1' }
+          ],
+          ledger: [
+            { delta: '+500', reason: 'Administrative Compliance Wallet Allocation', date: '300 days ago', balance: 500 },
+            { delta: '-50', reason: 'Testing Machine Calibration Consumables', date: '4 days ago', balance: 450 }
+          ]
         },
         sharma: {
+          id: 'usr-sharma',
           name: 'Prof. R. Sharma',
-          role: 'Resource Owner • FabLab',
+          role: 'FabLab Custodian • Resource Owner',
           initials: 'RS',
           certifications: ['LAB_SAFETY_101', 'LASER_SAFETY_SOP', 'CNC_CERT'],
-          credits: 500,
-          hoursPast30d: 0.0
-        },
-        mehta: {
-          name: 'Dr. S. Mehta',
-          role: 'Campus Safety Manager',
-          initials: 'SM',
-          certifications: ['ALL_PERMISSIONS'],
           credits: 999,
-          hoursPast30d: 0.0
+          hoursPast30d: 0.0,
+          history: [
+            { id: 'CS-2026-8891', resource: 'Epilog Laser Cutter Bay 4', location: 'MakerWing Bay 4', time: 'Today 09:12', status: 'OWNED', purpose: 'Machine asset registration & 80W optics alignment baseline', hash: 'e5b9f71c3a6e9a8f4b2d1c0e3a6f8b9d2e1c0a4b' }
+          ],
+          ledger: [
+            { delta: '+999', reason: 'Faculty Equipment Custodian Ledger', date: '365 days ago', balance: 999 }
+          ]
         }
       },
       resources: [
@@ -1166,7 +1278,7 @@
           hourlyCredits: 25,
           desc: '50kN load capacity universal mechanical tester for tensile, compression, and 3-point bend stress testing.',
           prerequisites: ['LAB_SAFETY_101'],
-          custodian: 'Dr. S. Mehta'
+          custodian: 'Pragyan'
         },
         {
           id: 'res-gpu',
@@ -1177,7 +1289,7 @@
           hourlyCredits: 20,
           desc: 'High-throughput cluster node with 8x A100 Tensor Core GPUs for distributed deep learning and simulation.',
           prerequisites: ['LAB_SAFETY_101'],
-          custodian: 'HPC Center Admin'
+          custodian: 'Pragyan'
         },
         {
           id: 'res-book-sze',
@@ -1239,20 +1351,35 @@
 
     // --- PERSONA SWITCHER ---
     async function setPersona(personaKey) {
+      // Map aliases
+      if (personaKey === 'arjun') personaKey = 'deepak';
+      if (personaKey === 'priya') personaKey = 'sougata';
+      if (personaKey === 'mehta') personaKey = 'pragyan';
+
       APP_STATE.currentPersonaKey = personaKey;
-      const p = APP_STATE.personas[personaKey];
+      const p = APP_STATE.personas[personaKey] || APP_STATE.personas.deepak;
       
       document.getElementById('userBadgeName').innerText = p.name;
       document.getElementById('userBadgeRole').innerText = p.role;
-      document.getElementById('userAvatar').innerText = p.initials;
+      document.getElementById('userAvatar').innerHTML = `${p.initials}<span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-white"></span>`;
 
-      ['arjun', 'priya', 'sharma', 'mehta'].forEach(k => {
+      // Update toolbar buttons
+      ['deepak', 'sougata', 'pragyan', 'sharma'].forEach(k => {
         const btn = document.getElementById('btn-p-' + k);
         if (btn) {
           if (k === personaKey) {
             btn.className = "px-2.5 py-1 rounded-lg text-xs font-semibold bg-indigo-600 text-white whitespace-nowrap shadow-sm cursor-pointer";
           } else {
             btn.className = "px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 whitespace-nowrap cursor-pointer";
+          }
+        }
+
+        const pill = document.getElementById('p-pill-' + k);
+        if (pill) {
+          if (k === personaKey) {
+            pill.className = "px-2.5 py-1 rounded-lg text-xs font-semibold bg-indigo-600 text-white cursor-pointer shadow-xs";
+          } else {
+            pill.className = "px-2.5 py-1 rounded-lg text-xs font-semibold bg-white hover:bg-slate-200 text-slate-700 border border-slate-200 cursor-pointer";
           }
         }
       });
@@ -1268,7 +1395,156 @@
 
       renderDetailEligibility();
       renderCatalog();
-      showToast(`Switched persona to: ${p.name} (${p.role})`, 'success');
+      renderProfileModalContent();
+      showToast(`Active profile: ${p.name} (${p.role})`, 'success');
+    }
+
+    // --- AUTOMATED PROFILE & CUSTODY HISTORY MODAL ENGINE ---
+    function openProfileHistoryModal() {
+      const modal = document.getElementById('profileHistoryModal');
+      renderProfileModalContent();
+      modal.classList.remove('hidden');
+    }
+
+    function closeProfileHistoryModal() {
+      document.getElementById('profileHistoryModal').classList.add('hidden');
+    }
+
+    function switchProfileTab(tabName) {
+      APP_STATE.currentProfileTab = tabName;
+      ['history', 'ledger', 'badges'].forEach(t => {
+        const btn = document.getElementById('tab-btn-' + t);
+        if (btn) {
+          if (t === tabName) {
+            btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-900 text-white cursor-pointer shadow-xs";
+          } else {
+            btn.className = "px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 bg-white hover:bg-slate-100 border border-slate-200 cursor-pointer";
+          }
+        }
+      });
+      renderProfileModalContent();
+    }
+
+    function renderProfileModalContent() {
+      const p = APP_STATE.personas[APP_STATE.currentPersonaKey] || APP_STATE.personas.deepak;
+      
+      document.getElementById('modalUserName').innerText = p.name;
+      document.getElementById('modalUserRole').innerText = `${p.role} • ${p.name.toLowerCase().replace(/ /g, '.')}@campus.edu`;
+      document.getElementById('modalUserAvatar').innerText = p.initials;
+      document.getElementById('modalUserCredits').innerText = `${p.credits} Credits`;
+      document.getElementById('ledgerCountBadge').innerText = (p.ledger || []).length;
+
+      const container = document.getElementById('profileTabContentArea');
+      container.innerHTML = '';
+
+      if (APP_STATE.currentProfileTab === 'history') {
+        if (!p.history || p.history.length === 0) {
+          container.innerHTML = `<div class="p-8 text-center text-slate-400 text-xs">No active or historical custody records found.</div>`;
+          return;
+        }
+
+        p.history.forEach(b => {
+          let badgeColor = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+          if (b.status === 'APPROVED') badgeColor = 'bg-blue-50 text-blue-700 border-blue-200';
+          if (b.status === 'SUPERVISED') badgeColor = 'bg-purple-50 text-purple-700 border-purple-200';
+
+          const card = document.createElement('div');
+          card.className = "p-3.5 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-white hover:border-indigo-300 transition-all space-y-2";
+          card.innerHTML = `
+            <div class="flex items-start justify-between">
+              <div>
+                <span class="text-[10px] font-mono font-bold text-slate-400">BOOKING #${b.id} &bull; ${b.time}</span>
+                <h4 class="text-xs font-bold text-slate-900 mt-0.5">${b.resource}</h4>
+                <p class="text-[11px] text-slate-500">${b.location}</p>
+              </div>
+              <span class="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${badgeColor}">
+                ${b.status}
+              </span>
+            </div>
+            <p class="text-[11px] text-slate-600 bg-white p-2 rounded-lg border border-slate-200/80 font-mono">
+              <strong>Objective:</strong> ${b.purpose}
+            </p>
+            <div class="flex items-center justify-between pt-1">
+              <span class="text-[9px] font-mono text-slate-400 truncate max-w-[280px]" title="${b.hash}">SHA: ${b.hash}</span>
+              <button onclick="viewCryptographicReceipt('${b.id}', '${b.hash}')" class="px-2.5 py-1 rounded-md bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-[10px] transition-colors cursor-pointer">
+                View Cryptographic Receipt &rarr;
+              </button>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+      } else if (APP_STATE.currentProfileTab === 'ledger') {
+        const table = document.createElement('table');
+        table.className = "w-full text-left text-xs border-collapse";
+        table.innerHTML = `
+          <thead>
+            <tr class="text-slate-400 border-b border-slate-200 text-[10px] uppercase">
+              <th class="py-1.5">Date</th>
+              <th class="py-1.5">Description</th>
+              <th class="py-1.5 text-right">Delta</th>
+              <th class="py-1.5 text-right">Balance</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 font-mono text-slate-700">
+            ${(p.ledger || []).map(entry => `
+              <tr class="hover:bg-slate-50">
+                <td class="py-2 text-[10px] text-slate-400">${entry.date}</td>
+                <td class="py-2 font-sans text-xs font-medium">${entry.reason}</td>
+                <td class="py-2 text-right font-bold ${entry.delta.startsWith('+') ? 'text-emerald-600' : 'text-rose-600'}">${entry.delta}</td>
+                <td class="py-2 text-right font-bold text-slate-900">${entry.balance || p.credits}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        `;
+        container.appendChild(table);
+      } else if (APP_STATE.currentProfileTab === 'badges') {
+        container.innerHTML = `
+          <div class="space-y-2">
+            <div class="p-3 rounded-xl border border-emerald-200 bg-emerald-50/60 flex items-center justify-between">
+              <div class="flex items-center space-x-3">
+                <span class="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-sm">✓</span>
+                <div>
+                  <h4 class="text-xs font-bold text-slate-900">General Lab Safety 101</h4>
+                  <p class="text-[10px] text-slate-500">Verified by Campus EHS Compliance &bull; Expires in 200 days</p>
+                </div>
+              </div>
+              <span class="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">Active</span>
+            </div>
+
+            <div class="p-3 rounded-xl border ${p.certifications.includes('LASER_SAFETY_SOP') ? 'border-emerald-200 bg-emerald-50/60' : 'border-amber-200 bg-amber-50/60'} flex items-center justify-between">
+              <div class="flex items-center space-x-3">
+                <span class="w-8 h-8 rounded-full ${p.certifications.includes('LASER_SAFETY_SOP') ? 'bg-emerald-500 text-white' : 'bg-amber-500 text-white'} flex items-center justify-center font-bold text-sm">
+                  ${p.certifications.includes('LASER_SAFETY_SOP') ? '✓' : '!'}
+                </span>
+                <div>
+                  <h4 class="text-xs font-bold text-slate-900">Class 4 CO2 Laser Safety SOP</h4>
+                  <p class="text-[10px] text-slate-500">${p.certifications.includes('LASER_SAFETY_SOP') ? 'Verified by FabLab Custodian • 120 days validity' : 'Action Required for Bay 4 Laser Access'}</p>
+                </div>
+              </div>
+              ${p.certifications.includes('LASER_SAFETY_SOP') 
+                ? '<span class="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">Active</span>' 
+                : '<button onclick="closeProfileHistoryModal(); openTrainingModal(\'LASER_SAFETY_SOP\')" class="px-2.5 py-1 rounded bg-amber-500 hover:bg-amber-600 text-white font-bold text-[10px] cursor-pointer">1-Click Certify</button>'}
+            </div>
+
+            <div class="p-3 rounded-xl border border-emerald-200 bg-emerald-50/60 flex items-center justify-between">
+              <div class="flex items-center space-x-3">
+                <span class="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-sm">✓</span>
+                <div>
+                  <h4 class="text-xs font-bold text-slate-900">High-Voltage Circuit Safety</h4>
+                  <p class="text-[10px] text-slate-500">Verified by EE Department &bull; 180 days validity</p>
+                </div>
+              </div>
+              <span class="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">Active</span>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function viewCryptographicReceipt(bookingId, hash) {
+      closeProfileHistoryModal();
+      showToast(`Displaying Cryptographic Receipt for #${bookingId} (SHA: ${hash.substring(0, 12)}...)`, 'success');
+      switchView('audit');
     }
 
     // --- CATALOG RENDERING ---
@@ -1339,7 +1615,7 @@
     }
 
     function renderDetailEligibility() {
-      const p = APP_STATE.personas[APP_STATE.currentPersonaKey];
+      const p = APP_STATE.personas[APP_STATE.currentPersonaKey] || APP_STATE.personas.deepak;
       const hasLaser = p.certifications.includes('LASER_SAFETY_SOP') || p.certifications.includes('ALL_PERMISSIONS');
       
       const pill = document.getElementById('eligibilitySummaryPill');
@@ -1394,7 +1670,7 @@
     }
 
     async function completeRemediationModal() {
-      const p = APP_STATE.personas[APP_STATE.currentPersonaKey];
+      const p = APP_STATE.personas[APP_STATE.currentPersonaKey] || APP_STATE.personas.deepak;
       if (!p.certifications.includes('LASER_SAFETY_SOP')) {
         p.certifications.push('LASER_SAFETY_SOP');
       }
@@ -1410,6 +1686,7 @@
 
       closeTrainingModal();
       renderDetailEligibility();
+      renderProfileModalContent();
       showToast("Training Completed! 'Laser Safety SOP' badge cryptographically signed and added to your wallet.", "success");
     }
 
@@ -1504,7 +1781,7 @@
           body: JSON.stringify({ checklist: { ppe: true, fumeVent: true, cleanBed: true } })
         });
       } catch (e) {}
-      showToast("Check-in Verified! Tool interlock unlocked. Custody transferred to Arjun Sharma.", "success");
+      showToast("Check-in Verified! Tool interlock unlocked. Custody transferred to Deepak Singhi.", "success");
       switchView('checkout');
     }
 
@@ -1611,7 +1888,7 @@
         }
       }, 1000);
 
-      showToast("Waitlist auto-promoted! 15-Minute exclusive claim window opened for Arjun Sharma.", "success");
+      showToast("Waitlist auto-promoted! 15-Minute exclusive claim window opened for Deepak Singhi.", "success");
     }
 
     function claimWaitlistSlot() {
@@ -1758,7 +2035,7 @@
       let prevHash = "0000000000000000000000000000000000000000000000000000000000000000";
       for (let i = 0; i < APP_STATE.auditChain.length; i++) {
         let b = APP_STATE.auditChain[i];
-        let calculated = sha256(b.index + "|" + b.timestamp + "|" + b.actor + "|" + b.action + "|" + b.payload + "|" + prevHash);
+        let calculated = sha256(b.index + "|" + b.timestamp + "|" + (b.actor || b.actor_name) + "|" + b.action + "|" + b.payload + "|" + prevHash);
         if (calculated !== (b.currentHash || b.hash)) {
           valid = false;
           break;
@@ -1796,7 +2073,7 @@
           body: JSON.stringify({ minutes: 120 })
         });
       } catch (e) {}
-      showToast("Simulation: User +2h overdue. SMS reminder sent, tier review ticket queued for Dr. Mehta.", "warning");
+      showToast("Simulation: User +2h overdue. Automated SMS sent, tier review ticket queued for Pragyan.", "warning");
     }
 
     function triggerDamageReturn() {
@@ -1808,7 +2085,7 @@
         await fetch('/demo/reset', { method: 'POST' });
       } catch (e) {}
       initAuditChain();
-      setPersona('arjun');
+      setPersona('deepak');
       renderHeatmap();
       renderCatalog();
       renderAuditTable();
@@ -1834,7 +2111,7 @@
       renderCatalog();
       renderHeatmap();
       renderAuditTable();
-      setPersona('arjun');
+      setPersona('deepak');
     };
   </script>
 </body>

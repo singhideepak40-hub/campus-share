@@ -96,13 +96,16 @@ function serveStaticFile(res, filePath) {
 function getActiveProfile() {
   const personaKey = campusDb.memoryStore.activePersona;
   const idMap = {
-    arjun: 'usr-arjun',
-    priya: 'usr-priya',
-    sharma: 'usr-sharma',
-    mehta: 'usr-mehta'
+    deepak: 'usr-deepak',
+    arjun: 'usr-deepak',
+    sougata: 'usr-sougata',
+    priya: 'usr-sougata',
+    pragyan: 'usr-pragyan',
+    mehta: 'usr-pragyan',
+    sharma: 'usr-sharma'
   };
-  const profileId = idMap[personaKey] || 'usr-arjun';
-  return campusDb.memoryStore.profiles.find(p => p.id === profileId);
+  const profileId = idMap[personaKey] || 'usr-deepak';
+  return campusDb.memoryStore.profiles.find(p => p.id === profileId) || campusDb.memoryStore.profiles[0];
 }
 
 // Create HTTP server
@@ -127,7 +130,7 @@ const server = http.createServer(async (req, res) => {
     // -------------------------------------------------------------
     if (pathname === '/auth/persona' && method === 'POST') {
       const body = await parseJsonBody(req);
-      const personaKey = body.persona || 'arjun';
+      const personaKey = body.persona || 'deepak';
       campusDb.memoryStore.activePersona = personaKey;
       const current = getActiveProfile();
       return sendJson(res, 200, { ok: true, activePersona: personaKey, profile: current });
@@ -136,6 +139,30 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/auth/me' && method === 'GET') {
       const current = getActiveProfile();
       return sendJson(res, 200, { ok: true, profile: current });
+    }
+
+    if (pathname === '/auth/history' && method === 'GET') {
+      const current = getActiveProfile();
+      const userBookings = campusDb.memoryStore.bookings.filter(b => b.user_id === current.id);
+      const userCredits = (campusDb.memoryStore.creditLedger || []).filter(cl => cl.user_id === current.id);
+      const userCreds = campusDb.memoryStore.user_credentials.filter(uc => uc.user_id === current.id);
+      const credDetails = userCreds.map(uc => {
+        const c = campusDb.memoryStore.credentials.find(cred => cred.id === uc.credential_id);
+        return {
+          id: uc.credential_id,
+          name: c ? c.name : uc.credential_id,
+          status: uc.status,
+          expires_at: uc.expires_at
+        };
+      });
+
+      return sendJson(res, 200, {
+        ok: true,
+        profile: current,
+        bookings: userBookings,
+        creditLedger: userCredits,
+        credentials: credDetails
+      });
     }
 
     // -------------------------------------------------------------

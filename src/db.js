@@ -2,6 +2,7 @@
  * CampusShare v2 - Database & Storage Adapter
  * Provides local SQL execution via Node v22's built-in node:sqlite,
  * with fallbacks for standard in-memory transactional mock data.
+ * Featuring team personas: Deepak Singhi, Sougata, Pragyan, Prof. R. Sharma.
  */
 
 let sqlite;
@@ -19,7 +20,7 @@ class CampusDatabase {
     this.db = null;
     this.memoryStore = {
       clockOffsetMinutes: 0,
-      activePersona: 'arjun',
+      activePersona: 'deepak',
       profiles: [],
       resources: [],
       credentials: [],
@@ -27,6 +28,7 @@ class CampusDatabase {
       resource_requirements: [],
       user_credentials: [],
       bookings: [],
+      creditLedger: [],
       waitlist: [],
       auditChain: [],
       conditionReports: [],
@@ -94,27 +96,37 @@ class CampusDatabase {
   seedInitialData() {
     const now = new Date();
 
-    // 1. Seed Profiles
+    // 1. Seed Profiles (Deepak Singhi, Sougata, Pragyan, Prof. Sharma)
     this.memoryStore.profiles = [
       {
-        id: 'usr-arjun',
-        name: 'Arjun Sharma',
-        email: 'arjun.sharma@campus.edu',
+        id: 'usr-deepak',
+        name: 'Deepak Singhi',
+        email: 'deepak.singhi@campus.edu',
         role: 'user',
-        trust_tier: 'new',
-        credits_balance: 100,
-        hours_past_30d: 0.0,
-        created_at: new Date(now.getTime() - 14 * 86400000).toISOString()
+        trust_tier: 'standard',
+        credits_balance: 135,
+        hours_past_30d: 4.0,
+        created_at: new Date(now.getTime() - 45 * 86400000).toISOString()
       },
       {
-        id: 'usr-priya',
-        name: 'Priya Patel',
-        email: 'priya.patel@campus.edu',
+        id: 'usr-sougata',
+        name: 'Sougata',
+        email: 'sougata@campus.edu',
         role: 'user',
         trust_tier: 'trusted',
-        credits_balance: 65,
+        credits_balance: 180,
         hours_past_30d: 14.5,
-        created_at: new Date(now.getTime() - 90 * 86400000).toISOString()
+        created_at: new Date(now.getTime() - 120 * 86400000).toISOString()
+      },
+      {
+        id: 'usr-pragyan',
+        name: 'Pragyan',
+        email: 'pragyan@campus.edu',
+        role: 'manager',
+        trust_tier: 'trusted',
+        credits_balance: 450,
+        hours_past_30d: 2.0,
+        created_at: new Date(now.getTime() - 300 * 86400000).toISOString()
       },
       {
         id: 'usr-sharma',
@@ -122,19 +134,9 @@ class CampusDatabase {
         email: 'r.sharma@campus.edu',
         role: 'owner',
         trust_tier: 'trusted',
-        credits_balance: 500,
-        hours_past_30d: 0.0,
-        created_at: new Date(now.getTime() - 365 * 86400000).toISOString()
-      },
-      {
-        id: 'usr-mehta',
-        name: 'Dr. S. Mehta',
-        email: 's.mehta@campus.edu',
-        role: 'manager',
-        trust_tier: 'trusted',
         credits_balance: 999,
         hours_past_30d: 0.0,
-        created_at: new Date(now.getTime() - 400 * 86400000).toISOString()
+        created_at: new Date(now.getTime() - 365 * 86400000).toISOString()
       }
     ];
 
@@ -156,31 +158,52 @@ class CampusDatabase {
     this.memoryStore.user_credentials = [
       {
         id: 'uc-1',
-        user_id: 'usr-arjun',
+        user_id: 'usr-deepak',
         credential_id: 'LAB_SAFETY_101',
         status: 'verified',
         expires_at: new Date(now.getTime() + 200 * 86400000).toISOString()
       },
       {
         id: 'uc-2',
-        user_id: 'usr-priya',
+        user_id: 'usr-deepak',
+        credential_id: 'BASIC_ELECTRONICS',
+        status: 'verified',
+        expires_at: new Date(now.getTime() + 180 * 86400000).toISOString()
+      },
+      {
+        id: 'uc-3',
+        user_id: 'usr-sougata',
         credential_id: 'LAB_SAFETY_101',
         status: 'verified',
         expires_at: new Date(now.getTime() + 250 * 86400000).toISOString()
       },
       {
-        id: 'uc-3',
-        user_id: 'usr-priya',
+        id: 'uc-4',
+        user_id: 'usr-sougata',
         credential_id: 'LASER_SAFETY_SOP',
         status: 'verified',
         expires_at: new Date(now.getTime() + 120 * 86400000).toISOString()
       },
       {
-        id: 'uc-4',
-        user_id: 'usr-priya',
-        credential_id: 'BASIC_ELECTRONICS',
+        id: 'uc-5',
+        user_id: 'usr-sougata',
+        credential_id: 'CNC_CERT',
         status: 'verified',
         expires_at: new Date(now.getTime() + 300 * 86400000).toISOString()
+      },
+      {
+        id: 'uc-6',
+        user_id: 'usr-pragyan',
+        credential_id: 'LAB_SAFETY_101',
+        status: 'verified',
+        expires_at: new Date(now.getTime() + 365 * 86400000).toISOString()
+      },
+      {
+        id: 'uc-7',
+        user_id: 'usr-pragyan',
+        credential_id: 'LASER_SAFETY_SOP',
+        status: 'verified',
+        expires_at: new Date(now.getTime() + 365 * 86400000).toISOString()
       }
     ];
 
@@ -236,7 +259,7 @@ class CampusDatabase {
       },
       {
         id: 'res-tensile',
-        owner_id: 'usr-mehta',
+        owner_id: 'usr-pragyan',
         name: 'Instron 5969 Dual Column Tensile Tester',
         category: 'Materials Testing',
         location: 'Materials Characterization 102',
@@ -248,7 +271,7 @@ class CampusDatabase {
       },
       {
         id: 'res-gpu',
-        owner_id: 'usr-mehta',
+        owner_id: 'usr-pragyan',
         name: 'NVIDIA HGX A100 80GB Training Node',
         category: 'Advanced Computing',
         location: 'HPC Server Room 3 (SSH Slurm)',
@@ -296,7 +319,7 @@ class CampusDatabase {
       { resource_id: 'res-book-shigley', credential_id: 'LAB_SAFETY_101' }
     ];
 
-    // 5. Seed Initial Bookings
+    // 5. Seed Comprehensive Booking History (for Deepak, Sougata, Pragyan)
     const today = new Date(now);
     today.setHours(14, 0, 0, 0);
     const todayEnd = new Date(today);
@@ -306,7 +329,10 @@ class CampusDatabase {
       {
         id: 'CS-2026-8891',
         resource_id: 'res-laser',
-        user_id: 'usr-arjun',
+        resource_name: 'Epilog Fusion Pro 48 Laser Cutter',
+        location: 'MakerWing Bay 4',
+        user_id: 'usr-deepak',
+        user_name: 'Deepak Singhi',
         start_at: today.toISOString(),
         end_at: todayEnd.toISOString(),
         purpose: 'Precision cutting 5mm carbon-reinforced acrylic for drone chassis',
@@ -322,16 +348,134 @@ class CampusDatabase {
           competingCandidateScore: 64.2
         },
         created_at: new Date(now.getTime() - 4 * 3600000).toISOString()
+      },
+      {
+        id: 'CS-2026-8104',
+        resource_id: 'res-scope',
+        resource_name: 'Rigol DS1054Z 100MHz Oscilloscope',
+        location: 'Circuit Design Lab 204',
+        user_id: 'usr-deepak',
+        user_name: 'Deepak Singhi',
+        start_at: new Date(now.getTime() - 3 * 86400000).toISOString(),
+        end_at: new Date(now.getTime() - 3 * 86400000 + 7200000).toISOString(),
+        purpose: 'SPI/I2C sensor signal integrity characterization',
+        status: 'RETURNED',
+        priority_score: 82.0,
+        decision_reason: { result: 'approved' },
+        created_at: new Date(now.getTime() - 4 * 86400000).toISOString()
+      },
+      {
+        id: 'CS-2026-7850',
+        resource_id: 'res-book-sze',
+        resource_name: 'Semiconductor Devices: Physics and Technology (S.M. Sze)',
+        location: 'Central Library • Rare Reserve R-14',
+        user_id: 'usr-deepak',
+        user_name: 'Deepak Singhi',
+        start_at: new Date(now.getTime() - 8 * 86400000).toISOString(),
+        end_at: new Date(now.getTime() - 6 * 86400000).toISOString(),
+        purpose: 'Thesis literature review on bipolar junction transistor bandgaps',
+        status: 'CLOSED',
+        priority_score: 95.0,
+        decision_reason: { result: 'approved' },
+        created_at: new Date(now.getTime() - 9 * 86400000).toISOString()
+      },
+      {
+        id: 'CS-2026-8720',
+        resource_id: 'res-cnc',
+        resource_name: 'Haas Mini Mill 5-Axis CNC Center',
+        location: 'Precision Machine Shop Bay 1',
+        user_id: 'usr-sougata',
+        user_name: 'Sougata',
+        start_at: new Date(now.getTime() - 1 * 86400000).toISOString(),
+        end_at: new Date(now.getTime() - 1 * 86400000 + 10800000).toISOString(),
+        purpose: 'Custom aluminum 6061 planetary gearbox carrier machining',
+        status: 'RETURNED',
+        priority_score: 91.5,
+        decision_reason: { result: 'approved' },
+        created_at: new Date(now.getTime() - 2 * 86400000).toISOString()
+      },
+      {
+        id: 'CS-2026-8419',
+        resource_id: 'res-sla',
+        resource_name: 'Formlabs Form 3+ SLA Printer',
+        location: 'Rapid Prototyping Bay 2',
+        user_id: 'usr-sougata',
+        user_name: 'Sougata',
+        start_at: new Date(now.getTime() - 5 * 86400000).toISOString(),
+        end_at: new Date(now.getTime() - 5 * 86400000 + 21600000).toISOString(),
+        purpose: 'Biocompatible dental resin manifold prototype',
+        status: 'CLOSED',
+        priority_score: 88.0,
+        decision_reason: { result: 'approved' },
+        created_at: new Date(now.getTime() - 6 * 86400000).toISOString()
       }
     ];
 
-    // 6. Seed Waitlist
+    // 6. Credit Ledger Entries (Transaction History)
+    this.memoryStore.creditLedger = [
+      {
+        id: 'cl-1',
+        user_id: 'usr-deepak',
+        booking_id: null,
+        delta: +100,
+        balance_after: 100,
+        reason: 'Campus Onboarding Research Grant',
+        created_at: new Date(now.getTime() - 45 * 86400000).toISOString()
+      },
+      {
+        id: 'cl-2',
+        user_id: 'usr-deepak',
+        booking_id: 'CS-2026-7850',
+        delta: -4,
+        balance_after: 96,
+        reason: 'Rare Reserve Textbook 48h Rental',
+        created_at: new Date(now.getTime() - 8 * 86400000).toISOString()
+      },
+      {
+        id: 'cl-3',
+        user_id: 'usr-deepak',
+        booking_id: 'CS-2026-7850',
+        delta: +20,
+        balance_after: 116,
+        reason: 'On-Time Pristine Condition Return Bonus',
+        created_at: new Date(now.getTime() - 6 * 86400000).toISOString()
+      },
+      {
+        id: 'cl-4',
+        user_id: 'usr-deepak',
+        booking_id: 'CS-2026-8104',
+        delta: -10,
+        balance_after: 106,
+        reason: 'Oscilloscope 2-Hour Lab Session',
+        created_at: new Date(now.getTime() - 3 * 86400000).toISOString()
+      },
+      {
+        id: 'cl-5',
+        user_id: 'usr-deepak',
+        booking_id: null,
+        delta: +44,
+        balance_after: 150,
+        reason: 'Peer Safety SOP Review & Assistance Grant',
+        created_at: new Date(now.getTime() - 1 * 86400000).toISOString()
+      },
+      {
+        id: 'cl-6',
+        user_id: 'usr-deepak',
+        booking_id: 'CS-2026-8891',
+        delta: -15,
+        balance_after: 135,
+        reason: 'Reservation Escrow: Laser Cutter Bay 4',
+        created_at: new Date(now.getTime() - 4 * 3600000).toISOString()
+      }
+    ];
+
+    // 7. Seed Waitlist
     this.memoryStore.waitlist = [
       {
         id: 'wl-1',
         booking_id: 'CS-2026-8891',
-        candidate_name: 'Vikram Singh',
-        candidate_id: 'usr-vikram',
+        candidate_name: 'Sougata',
+        candidate_id: 'usr-sougata',
         position: 1,
         priority_score: 64.2,
         status: 'QUEUED',
@@ -339,7 +483,7 @@ class CampusDatabase {
       }
     ];
 
-    // 7. Seed Initial Cryptographic Audit Chain (Genesis block + subsequent blocks)
+    // 8. Seed Initial Cryptographic Audit Chain
     this.memoryStore.auditChain = [];
     appendAuditBlock(this.memoryStore.auditChain, {
       booking_id: 'CS-2026-8891',
@@ -352,8 +496,8 @@ class CampusDatabase {
 
     appendAuditBlock(this.memoryStore.auditChain, {
       booking_id: 'CS-2026-8891',
-      actor_id: 'usr-arjun',
-      actor_name: 'Arjun Sharma',
+      actor_id: 'usr-deepak',
+      actor_name: 'Deepak Singhi',
       action: 'BOOKING_REQUESTED',
       payload: { slot: 'Today 14:00 - 16:00', urgency: 4, purpose: 'Drone Chassis' },
       timestamp: '2026-10-30T10:30:14.000Z'
@@ -361,8 +505,8 @@ class CampusDatabase {
 
     appendAuditBlock(this.memoryStore.auditChain, {
       booking_id: 'CS-2026-8891',
-      actor_id: 'usr-mehta',
-      actor_name: 'Dr. S. Mehta',
+      actor_id: 'usr-pragyan',
+      actor_name: 'Pragyan',
       action: 'REQUEST_APPROVED',
       payload: { priority_score: 78.4, dispatchRule: 'Fair-Share Algorithm v2' },
       timestamp: '2026-10-30T11:05:22.000Z'
@@ -370,22 +514,22 @@ class CampusDatabase {
 
     appendAuditBlock(this.memoryStore.auditChain, {
       booking_id: 'CS-2026-8891',
-      actor_id: 'usr-arjun',
-      actor_name: 'Arjun Sharma',
+      actor_id: 'usr-deepak',
+      actor_name: 'Deepak Singhi',
       action: 'CHECKIN_COMPLETED',
       payload: { hmac_token_valid: true, checklist_items_passed: 3, photos_anchored: 3 },
       timestamp: '2026-10-30T14:02:18.000Z'
     });
 
-    // 8. Seed Condition Reports
+    // 9. Seed Condition Reports
     this.memoryStore.conditionReports = [
       {
         id: 'cr-checkin-8891',
         booking_id: 'CS-2026-8891',
         phase: 'checkin',
         checklist_done: { ppe: true, fumeVent: true, cleanBed: true },
-        notes: 'Pristine baseline captured. Fume exhaust pressure optimal.',
-        created_by: 'usr-arjun',
+        notes: 'Pristine baseline captured by Deepak Singhi. Fume exhaust pressure optimal.',
+        created_by: 'usr-deepak',
         created_at: '2026-10-30T14:02:18.000Z',
         photos: [
           { angle: 'Front Panel', sha256: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855' },
@@ -395,7 +539,6 @@ class CampusDatabase {
       }
     ];
 
-    // Mirror to SQLite if enabled
     if (this.useSqlite) {
       this.syncMemoryToSqlite();
     }
@@ -423,7 +566,6 @@ class CampusDatabase {
     }
   }
 
-  // Clock time computation
   getVirtualClock() {
     const realNow = new Date();
     return new Date(realNow.getTime() + this.memoryStore.clockOffsetMinutes * 60000);
@@ -436,7 +578,7 @@ class CampusDatabase {
 
   resetAll() {
     this.memoryStore.clockOffsetMinutes = 0;
-    this.memoryStore.activePersona = 'arjun';
+    this.memoryStore.activePersona = 'deepak';
     this.seedInitialData();
     return true;
   }

@@ -141,20 +141,30 @@ node src/server.js
 # Open http://localhost:3000 in your browser
 ```
 
-### Pre-Configured Personas in Floating Toolbar:
-1. **Arjun Sharma (`arjun`):** Student, Tier 1 (New). Holds `Lab Safety 101`, missing `Laser Safety SOP`. Demonstrates the interactive DAG remediation.
-2. **Priya Patel (`priya`):** Student, Tier 3 (Trusted). Holds all fabrication certifications. Demonstrates rapid slot dispatch.
-3. **Prof. R. Sharma (`sharma`):** Resource Owner (MakerWing Custodian). Demonstrates owner analytics, heatmaps, and 1-click slot publishing.
-4. **Dr. S. Mehta (`mehta`):** Campus Safety Officer. Demonstrates incident reviews, safety holds, and audit verification.
+### Pre-Configured Team Personas & Profiles:
+1. **Deepak Singhi (`deepak`):** Lead Researcher • Tier 2 (Standard). Demonstrates interactive DAG prerequisite resolution, booking submission, and custody transfer.
+2. **Sougata (`sougata`):** Robotics & Prototyping Lead • Tier 3 (Trusted). Holds full fabrication certifications (`CNC_CERT`, `LASER_SAFETY_SOP`). Demonstrates rapid slot dispatch.
+3. **Pragyan (`pragyan`):** Campus Safety Custodian & Manager. Demonstrates incident arbitration, safety holds, and audit integrity verification.
+4. **Prof. R. Sharma (`sharma`):** Resource Owner (MakerWing Custodian). Demonstrates owner analytics, heatmaps, and 1-click slot publishing.
 
 ### Fast-Forward Interactive Triggers:
+- **Click Profile Avatar/Pill:** Opens the automated **User Custody & Booking History Modal** displaying past reservations, credit ledger transactions, and cryptographic receipts.
 - **Simulate Database Tamper:** Click in *Audit Chain* tab to alter Block #3 and watch the cryptographic validator catch the tampering instantly.
 - **Simulate Overdue:** Floating toolbar trigger simulating a +2h overdue condition with automated reminders.
 - **Simulate Scorch Return:** Immediately launches the 3-angle condition diffing wipe inspection.
 
 ---
 
-## 7. Known Limitations & Future Possibilities
+## 7. Team & Participant Details
+
+- **Deepak Singhi**: Lead Architect & Backend Core — Orchestrated the Booking Spine, database schema, REST API server, and cryptographic audit chains.
+- **Sougata**: Full-Stack Developer & Algorithmic Lead — Engineered the multi-variable fair-share priority scoring, Mulberry32 PRNG, and interactive UI diffing engine.
+- **Pragyan**: Systems Compliance & Safety Auditor — Designed the prerequisite DAG traversal, EHS safety checklists, state machine invariants, and rule-based anomaly detection.
+- **Prof. R. Sharma**: Faculty Advisor & Custodian Lead — Institutional resource modeling and MakerWing facility specifications.
+
+---
+
+## 8. Known Limitations & Future Possibilities
 
 ### Known Limitations
 - The current condition diff uses a simulated multimodal vision classifier with bounding box overlays. In production, fine-tuned lightweight vision models (e.g. YOLOv8 / Gemini Flash) deployed on edge cameras at each bay will process live camera feeds.

@@ -7,10 +7,10 @@
 -- 1. PROFILES & PERSONAS
 INSERT INTO profiles (id, org_id, name, email, role, trust_tier, credits_balance)
 VALUES 
-  ('11111111-1111-1111-1111-111111111111', 'CAMPUS-MAIN', 'Arjun Sharma', 'arjun.sharma@campus.edu', 'user', 'new', 100),
-  ('22222222-2222-2222-2222-222222222222', 'CAMPUS-MAIN', 'Priya Patel', 'priya.patel@campus.edu', 'user', 'trusted', 65),
-  ('33333333-3333-3333-3333-333333333333', 'CAMPUS-MAIN', 'Prof. R. Sharma', 'r.sharma@campus.edu', 'owner', 'trusted', 500),
-  ('44444444-4444-4444-4444-444444444444', 'CAMPUS-MAIN', 'Dr. S. Mehta', 's.mehta@campus.edu', 'manager', 'trusted', 999)
+  ('11111111-1111-1111-1111-111111111111', 'CAMPUS-MAIN', 'Deepak Singhi', 'deepak.singhi@campus.edu', 'user', 'standard', 135),
+  ('22222222-2222-2222-2222-222222222222', 'CAMPUS-MAIN', 'Sougata', 'sougata@campus.edu', 'user', 'trusted', 180),
+  ('33333333-3333-3333-3333-333333333333', 'CAMPUS-MAIN', 'Prof. R. Sharma', 'r.sharma@campus.edu', 'owner', 'trusted', 999),
+  ('44444444-4444-4444-4444-444444444444', 'CAMPUS-MAIN', 'Pragyan', 'pragyan@campus.edu', 'manager', 'trusted', 450)
 ON CONFLICT (id) DO NOTHING;
 
 -- 2. CREDENTIALS
@@ -96,7 +96,7 @@ VALUES
   (
     'CS-2026-8891',
     '11111111-1111-1111-1111-111111111111',
-    'Arjun Sharma',
+    'Deepak Singhi',
     'BOOKING_REQUESTED',
     '{"slot":"Today 14:00 - 16:00","urgency":4,"purpose":"Drone Chassis"}'::jsonb,
     'e5b9f71c3a6e9a8f4b2d1c0e3a6f8b9d2e1c0a4b7f9d1e3a6c8b0d2e4f6a8b1c',
@@ -106,7 +106,7 @@ VALUES
   (
     'CS-2026-8891',
     '44444444-4444-4444-4444-444444444444',
-    'Dr. S. Mehta',
+    'Pragyan',
     'REQUEST_APPROVED',
     '{"priority_score":78.4,"dispatchRule":"Fair-Share Algorithm v2"}'::jsonb,
     'a2c4e6f8b0d2e4f6a8b1c3d5e7f9a1b3c5d7e9f1a3b5c7d9e1f3a5b7c9d1e3f5',
@@ -116,7 +116,7 @@ VALUES
   (
     'CS-2026-8891',
     '11111111-1111-1111-1111-111111111111',
-    'Arjun Sharma',
+    'Deepak Singhi',
     'CHECKIN_COMPLETED',
     '{"hmac_token_valid":true,"checklist_items_passed":3,"photos_anchored":3}'::jsonb,
     'b1d3f5a7c9e1f3a5b7c9d1e3f5a7b9c1d3e5f7a9b1c3d5e7f9a1b3c5d7e9f1a3',
