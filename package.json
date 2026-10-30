@@ -1,0 +1,21 @@
+{
+  "name": "campus-share",
+  "version": "2.0.0",
+  "description": "CampusShare: The Booking Spine - Institutional Equipment & Space Trust Platform",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node test/domain.test.js",
+    "dev": "node src/server.js"
+  },
+  "keywords": [
+    "equipment-sharing",
+    "booking-spine",
+    "fairness",
+    "dag-eligibility",
+    "tamper-evident-audit",
+    "hmac-passport"
+  ],
+  "author": "CampusShare Team",
+  "license": "MIT"
+}
