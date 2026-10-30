@@ -95,6 +95,18 @@ function serveStaticFile(res, filePath) {
  */
 function getActiveProfile() {
   const personaKey = campusDb.memoryStore.activePersona;
+  if (personaKey === 'guest') {
+    return {
+      id: 'usr-guest',
+      name: 'Guest User',
+      email: 'guest@campus.edu',
+      role: 'guest',
+      trust_tier: 'unverified',
+      credits_balance: 0,
+      hours_past_30d: 0,
+      isGuest: true
+    };
+  }
   const idMap = {
     deepak: 'usr-deepak',
     arjun: 'usr-deepak',
@@ -104,8 +116,12 @@ function getActiveProfile() {
     mehta: 'usr-pragyan',
     sharma: 'usr-sharma'
   };
-  const profileId = idMap[personaKey] || 'usr-deepak';
-  return campusDb.memoryStore.profiles.find(p => p.id === profileId) || campusDb.memoryStore.profiles[0];
+  const profileId = idMap[personaKey] || personaKey;
+  let p = campusDb.memoryStore.profiles.find(p => p.id === profileId || p.email === personaKey);
+  if (!p) {
+    p = campusDb.memoryStore.profiles[0];
+  }
+  return { ...p, isGuest: false };
 }
 
 // Create HTTP server
@@ -126,8 +142,124 @@ const server = http.createServer(async (req, res) => {
 
   try {
     // -------------------------------------------------------------
-    // API: AUTH & PERSONA
+    // API: AUTH & PERSONA (WITH LOGIN, REGISTER, LOGOUT & SWITCHING)
     // -------------------------------------------------------------
+    if (pathname === '/auth/login' && method === 'POST') {
+      const body = await parseJsonBody(req);
+      
+      // 1. Persona-based 1-click login
+      if (body.persona) {
+        let pKey = (body.persona || 'deepak').toLowerCase();
+        if (pKey === 'arjun') pKey = 'deepak';
+        if (pKey === 'priya') pKey = 'sougata';
+        if (pKey === 'mehta') pKey = 'pragyan';
+        campusDb.memoryStore.activePersona = pKey;
+        const current = getActiveProfile();
+        return sendJson(res, 200, {
+          ok: true,
+          token: 'token-' + current.id,
+          persona: pKey,
+          profile: current,
+          message: `Logged in as ${current.name} (${current.role})`
+        });
+      }
+
+      // 2. Email-based login
+      if (body.email) {
+        const emailLower = (body.email || '').trim().toLowerCase();
+        let matched = campusDb.memoryStore.profiles.find(p => p.email.toLowerCase() === emailLower);
+        if (!matched) {
+          if (emailLower.includes('deepak')) matched = campusDb.memoryStore.profiles.find(p => p.id === 'usr-deepak');
+          else if (emailLower.includes('sougata')) matched = campusDb.memoryStore.profiles.find(p => p.id === 'usr-sougata');
+          else if (emailLower.includes('pragyan')) matched = campusDb.memoryStore.profiles.find(p => p.id === 'usr-pragyan');
+          else if (emailLower.includes('sharma')) matched = campusDb.memoryStore.profiles.find(p => p.id === 'usr-sharma');
+        }
+
+        if (matched) {
+          campusDb.memoryStore.activePersona = matched.id.replace('usr-', '');
+          return sendJson(res, 200, {
+            ok: true,
+            token: 'token-' + matched.id,
+            profile: { ...matched, isGuest: false },
+            message: `Welcome back, ${matched.name}!`
+          });
+        }
+
+        // Auto-provision student profile if unknown campus email
+        const newId = 'usr-' + Date.now().toString(36);
+        const autoName = body.email.split('@')[0].replace(/[\._]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        const newProf = {
+          id: newId,
+          name: autoName || 'Campus Scholar',
+          email: body.email,
+          role: 'user',
+          trust_tier: 'standard',
+          credits_balance: 100,
+          hours_past_30d: 0.0,
+          created_at: new Date().toISOString()
+        };
+        campusDb.memoryStore.profiles.push(newProf);
+        campusDb.memoryStore.creditLedger.push({
+          id: 'cl-' + Date.now(),
+          user_id: newId,
+          booking_id: null,
+          delta: +100,
+          balance_after: 100,
+          reason: 'Campus Onboarding Research Grant',
+          created_at: new Date().toISOString()
+        });
+        campusDb.memoryStore.activePersona = newProf.id;
+        return sendJson(res, 200, {
+          ok: true,
+          token: 'token-' + newProf.id,
+          profile: { ...newProf, isGuest: false },
+          message: `Account created for ${newProf.name}! 100 credits allocated.`
+        });
+      }
+
+      return sendJson(res, 400, { ok: false, error: 'Persona or email required for authentication.' });
+    }
+
+    if (pathname === '/auth/logout' && method === 'POST') {
+      campusDb.memoryStore.activePersona = 'guest';
+      return sendJson(res, 200, { ok: true, isGuest: true, message: 'Logged out. Active session is now Guest.' });
+    }
+
+    if (pathname === '/auth/register' && method === 'POST') {
+      const body = await parseJsonBody(req);
+      if (!body.email || !body.name) {
+        return sendJson(res, 400, { ok: false, error: 'Name and email are required.' });
+      }
+      const newId = 'usr-' + Date.now().toString(36);
+      const newProf = {
+        id: newId,
+        name: body.name.trim(),
+        email: body.email.trim().toLowerCase(),
+        role: body.role || 'user',
+        trust_tier: 'standard',
+        credits_balance: 100,
+        hours_past_30d: 0.0,
+        created_at: new Date().toISOString()
+      };
+      campusDb.memoryStore.profiles.push(newProf);
+      campusDb.memoryStore.creditLedger.push({
+        id: 'cl-' + Date.now(),
+        user_id: newId,
+        booking_id: null,
+        delta: +100,
+        balance_after: 100,
+        reason: 'Campus Onboarding Research Grant',
+        created_at: new Date().toISOString()
+      });
+      campusDb.memoryStore.activePersona = newProf.id;
+      return sendJson(res, 201, {
+        ok: true,
+        token: 'token-' + newProf.id,
+        profile: { ...newProf, isGuest: false },
+        message: `Registered successfully as ${newProf.name}! 100 research credits granted.`
+      });
+    }
+
     if (pathname === '/auth/persona' && method === 'POST') {
       const body = await parseJsonBody(req);
       const personaKey = body.persona || 'deepak';
@@ -138,7 +270,11 @@ const server = http.createServer(async (req, res) => {
 
     if (pathname === '/auth/me' && method === 'GET') {
       const current = getActiveProfile();
-      return sendJson(res, 200, { ok: true, profile: current });
+      return sendJson(res, 200, {
+        ok: true,
+        isGuest: current.role === 'guest' || current.isGuest === true,
+        profile: current
+      });
     }
 
     if (pathname === '/auth/history' && method === 'GET') {
@@ -240,6 +376,9 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/credentials' && method === 'POST') {
       const body = await parseJsonBody(req);
       const activeUser = getActiveProfile();
+      if (activeUser.isGuest || activeUser.role === 'guest') {
+        return sendJson(res, 401, { ok: false, error: 'Authentication required. Please sign in or choose a demo persona.' });
+      }
       const credentialId = body.credentialId || 'LASER_SAFETY_SOP';
 
       // Check if user already holds it
@@ -287,6 +426,9 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/bookings' && method === 'POST') {
       const body = await parseJsonBody(req);
       const activeUser = getActiveProfile();
+      if (activeUser.isGuest || activeUser.role === 'guest') {
+        return sendJson(res, 401, { ok: false, error: 'Authentication required. Please sign in or select a demo persona to request bookings.' });
+      }
       const resourceId = body.resourceId || 'res-laser';
       const targetResource = campusDb.memoryStore.resources.find(r => r.id === resourceId);
 
@@ -420,6 +562,9 @@ const server = http.createServer(async (req, res) => {
       const bookingId = parts[2];
       const body = await parseJsonBody(req);
       const activeUser = getActiveProfile();
+      if (activeUser.isGuest || activeUser.role === 'guest') {
+        return sendJson(res, 401, { ok: false, error: 'Authentication required. Please sign in to verify check-in.' });
+      }
 
       const booking = campusDb.memoryStore.bookings.find(b => b.id === bookingId);
       if (!booking) {
@@ -458,6 +603,9 @@ const server = http.createServer(async (req, res) => {
       const bookingId = parts[2];
       const body = await parseJsonBody(req);
       const activeUser = getActiveProfile();
+      if (activeUser.isGuest || activeUser.role === 'guest') {
+        return sendJson(res, 401, { ok: false, error: 'Authentication required. Please sign in to submit return condition report.' });
+      }
 
       const booking = campusDb.memoryStore.bookings.find(b => b.id === bookingId);
       if (!booking) {
@@ -656,3 +804,6 @@ server.listen(PORT, () => {
   console.log(` Active DB Mode: ${campusDb.useSqlite ? 'SQLite (MemorySync)' : 'Robust In-Memory Store'}`);
   console.log(`=======================================================`);
 });
+
+module.exports = server;
+

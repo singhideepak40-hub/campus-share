@@ -72,17 +72,23 @@
         </button>
       </nav>
 
-      <!-- Active User Profile Pill (CLICKABLE -> OPENS AUTOMATED HISTORY MODAL) -->
-      <div onclick="openProfileHistoryModal()" title="Click to view your Automated Custody History, Credits & Badges" 
-           class="flex items-center space-x-3 flex-shrink-0 cursor-pointer p-1.5 pr-2.5 rounded-xl hover:bg-indigo-50/80 border border-slate-200/80 hover:border-indigo-300 transition-all group shadow-2xs">
-        <div class="text-right hidden sm:block">
-          <div id="userBadgeName" class="text-xs font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">Deepak Singhi</div>
-          <div id="userBadgeRole" class="text-[10px] text-indigo-600 font-semibold uppercase tracking-wider">Lead Researcher &bull; Tier 2</div>
+      <!-- Header User / Auth Area (Supports 1-Click Persona Switching, Login Modal & Guest State) -->
+      <div id="headerAuthArea" class="flex items-center space-x-2 flex-shrink-0">
+        <div onclick="openProfileHistoryModal()" title="Click to view your Automated Custody History, Credits & Badges" 
+             class="flex items-center space-x-3 flex-shrink-0 cursor-pointer p-1.5 pr-2.5 rounded-xl hover:bg-indigo-50/80 border border-slate-200/80 hover:border-indigo-300 transition-all group shadow-2xs">
+          <div class="text-right hidden sm:block">
+            <div id="userBadgeName" class="text-xs font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">Deepak Singhi</div>
+            <div id="userBadgeRole" class="text-[10px] text-indigo-600 font-semibold uppercase tracking-wider">Lead Researcher &bull; Tier 2</div>
+          </div>
+          <div id="userAvatar" class="w-9 h-9 rounded-full bg-gradient-to-tr from-indigo-600 to-purple-600 text-white font-bold text-xs sm:text-sm flex items-center justify-center border-2 border-white shadow-sm ring-2 ring-indigo-200 relative group-hover:scale-105 transition-transform">
+            DS
+            <span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-white"></span>
+          </div>
         </div>
-        <div id="userAvatar" class="w-9 h-9 rounded-full bg-gradient-to-tr from-indigo-600 to-purple-600 text-white font-bold text-xs sm:text-sm flex items-center justify-center border-2 border-white shadow-sm ring-2 ring-indigo-200 relative group-hover:scale-105 transition-transform">
-          DS
-          <span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-white"></span>
-        </div>
+        <button onclick="openLoginModal()" title="Switch Persona / Account" class="hidden sm:flex px-2 py-1.5 rounded-xl border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50 text-slate-600 hover:text-indigo-600 text-xs font-semibold items-center space-x-1 cursor-pointer transition-colors">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+          <span>Switch</span>
+        </button>
       </div>
 
     </div>
@@ -884,11 +890,216 @@
       </div>
 
       <!-- Modal Bottom Actions -->
-      <div class="pt-3 border-t border-slate-200 flex items-center justify-between text-xs">
-        <span class="text-slate-400 font-mono text-[11px]">Cryptographically Signed &bull; Recency Half-Life 60d</span>
-        <button onclick="closeProfileHistoryModal()" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold cursor-pointer shadow-xs">
+      <div class="pt-3 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
+        <div class="flex items-center space-x-2 w-full sm:w-auto">
+          <button onclick="continueAsGuest()" class="px-3 py-1.5 rounded-lg border border-slate-200 hover:border-rose-300 hover:bg-rose-50 text-slate-600 hover:text-rose-600 font-semibold cursor-pointer transition-colors text-xs flex items-center space-x-1">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+            <span>Log Out</span>
+          </button>
+          <button onclick="closeProfileHistoryModal(); openLoginModal()" class="px-3 py-1.5 rounded-lg border border-indigo-200 hover:bg-indigo-50 text-indigo-700 font-semibold cursor-pointer transition-colors text-xs flex items-center space-x-1">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+            <span>Switch Persona ▾</span>
+          </button>
+        </div>
+        <button onclick="closeProfileHistoryModal()" class="w-full sm:w-auto px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold cursor-pointer shadow-xs">
           Close History
         </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= USER LOGIN & VICE-VERSA DEMO SWITCHER MODAL ================= -->
+  <div id="loginModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-200 flex flex-col max-h-[92vh] overflow-hidden space-y-4">
+      
+      <!-- Modal Header -->
+      <div class="flex items-start justify-between pb-3 border-b border-slate-100">
+        <div>
+          <div class="inline-flex items-center space-x-1.5 px-2 py-0.5 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-[11px] font-semibold mb-1">
+            <svg class="w-3.5 h-3.5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            <span>Campus Authentication Gateway</span>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900">Sign In to CampusShare</h3>
+          <p class="text-xs text-slate-500">Choose a 1-click team persona for instant demo testing or sign in with your campus account.</p>
+        </div>
+        <button onclick="closeLoginModal()" class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-500 font-bold flex items-center justify-center cursor-pointer transition-colors">&times;</button>
+      </div>
+
+      <!-- Main Login Mode Switcher Tabs -->
+      <div class="flex items-center space-x-2 border-b border-slate-200 pb-2">
+        <button onclick="switchAuthTab('demo')" id="auth-tab-demo" class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-indigo-600 text-white cursor-pointer shadow-xs transition-all flex items-center space-x-1.5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+          <span>1-Click Team Personas</span>
+        </button>
+        <button onclick="switchAuthTab('custom')" id="auth-tab-custom" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-600 bg-white hover:bg-slate-100 border border-slate-200 cursor-pointer transition-all flex items-center space-x-1.5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/></svg>
+          <span>Campus Login</span>
+        </button>
+        <button onclick="switchAuthTab('register')" id="auth-tab-register" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-600 bg-white hover:bg-slate-100 border border-slate-200 cursor-pointer transition-all flex items-center space-x-1.5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
+          <span>Register New</span>
+        </button>
+      </div>
+
+      <!-- Tab 1: 1-Click Demo Personas ("Vice-Versa Demo Use") -->
+      <div id="auth-panel-demo" class="space-y-2.5 overflow-y-auto max-h-[50vh] pr-1">
+        <p class="text-xs text-slate-500 font-medium">Select any verified persona below to test their specific permissions, reservations, custody records, and trust tier instantly:</p>
+        
+        <!-- Deepak Singhi Card -->
+        <div onclick="loginAsPersona('deepak')" class="p-3 rounded-xl border border-indigo-200 hover:border-indigo-400 bg-indigo-50/40 hover:bg-indigo-50 transition-all cursor-pointer flex items-center justify-between group shadow-xs">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 text-white font-bold text-sm flex items-center justify-center shadow-xs">
+              DS
+            </div>
+            <div>
+              <div class="flex items-center space-x-2">
+                <span class="text-sm font-bold text-slate-900 group-hover:text-indigo-600">Deepak Singhi</span>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700 font-mono">Lead Researcher</span>
+              </div>
+              <p class="text-[11px] text-slate-500">Tier 2 Standard &bull; 135 Credits &bull; Pending Drone Chassis Cut on 80W Laser Bay 4</p>
+            </div>
+          </div>
+          <button class="px-3 py-1.5 rounded-lg bg-indigo-600 group-hover:bg-indigo-700 text-white text-xs font-semibold shadow-xs">
+            Sign In &rarr;
+          </button>
+        </div>
+
+        <!-- Sougata Card -->
+        <div onclick="loginAsPersona('sougata')" class="p-3 rounded-xl border border-slate-200 hover:border-emerald-300 hover:bg-emerald-50/40 transition-all cursor-pointer flex items-center justify-between group shadow-xs">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-600 text-white font-bold text-sm flex items-center justify-center shadow-xs">
+              SO
+            </div>
+            <div>
+              <div class="flex items-center space-x-2">
+                <span class="text-sm font-bold text-slate-900 group-hover:text-emerald-700">Sougata</span>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-mono">Tier 3 (Trusted)</span>
+              </div>
+              <p class="text-[11px] text-slate-500">Robotics Maker &bull; 180 Credits &bull; Certified CNC & Laser SOP &bull; Clean Return History</p>
+            </div>
+          </div>
+          <button class="px-3 py-1.5 rounded-lg bg-slate-900 group-hover:bg-emerald-700 text-white text-xs font-semibold shadow-xs">
+            Sign In &rarr;
+          </button>
+        </div>
+
+        <!-- Pragyan Card -->
+        <div onclick="loginAsPersona('pragyan')" class="p-3 rounded-xl border border-slate-200 hover:border-amber-300 hover:bg-amber-50/40 transition-all cursor-pointer flex items-center justify-between group shadow-xs">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-600 text-white font-bold text-sm flex items-center justify-center shadow-xs">
+              PR
+            </div>
+            <div>
+              <div class="flex items-center space-x-2">
+                <span class="text-sm font-bold text-slate-900 group-hover:text-amber-800">Pragyan</span>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-mono">Safety Officer & Mgr</span>
+              </div>
+              <p class="text-[11px] text-slate-500">Compliance & EHS &bull; 450 Credits &bull; Audits SHA-256 chains & resolves incident disputes</p>
+            </div>
+          </div>
+          <button class="px-3 py-1.5 rounded-lg bg-slate-900 group-hover:bg-amber-600 text-white text-xs font-semibold shadow-xs">
+            Sign In &rarr;
+          </button>
+        </div>
+
+        <!-- Prof. Sharma Card -->
+        <div onclick="loginAsPersona('sharma')" class="p-3 rounded-xl border border-slate-200 hover:border-purple-300 hover:bg-purple-50/40 transition-all cursor-pointer flex items-center justify-between group shadow-xs">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-700 text-white font-bold text-sm flex items-center justify-center shadow-xs">
+              RS
+            </div>
+            <div>
+              <div class="flex items-center space-x-2">
+                <span class="text-sm font-bold text-slate-900 group-hover:text-purple-700">Prof. R. Sharma</span>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-100 text-purple-800 font-mono">Resource Owner</span>
+              </div>
+              <p class="text-[11px] text-slate-500">FabLab Custodian &bull; 999 Credits &bull; Manages Epilog Laser Cutter, publishes recurring off-peak slots</p>
+            </div>
+          </div>
+          <button class="px-3 py-1.5 rounded-lg bg-slate-900 group-hover:bg-purple-700 text-white text-xs font-semibold shadow-xs">
+            Sign In &rarr;
+          </button>
+        </div>
+
+        <!-- Guest Switcher Option -->
+        <div class="pt-2 flex items-center justify-between text-xs text-slate-500">
+          <span>Testing unauthenticated guest state?</span>
+          <button onclick="continueAsGuest()" class="font-bold text-slate-700 hover:text-indigo-600 underline cursor-pointer">
+            Browse in Guest Mode
+          </button>
+        </div>
+      </div>
+
+      <!-- Tab 2: Custom Campus Account Login Form -->
+      <div id="auth-panel-custom" class="hidden space-y-3.5">
+        <form id="customLoginForm" onsubmit="handleCustomLogin(event)" class="space-y-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Campus Email Address</label>
+            <input type="email" id="loginEmail" required placeholder="name@campus.edu" 
+                   value="deepak.singhi@campus.edu"
+                   class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+            <div class="flex flex-wrap gap-1.5 mt-1.5">
+              <span class="text-[10px] text-slate-400 font-medium self-center">Quick fill:</span>
+              <button type="button" onclick="fillLoginEmail('deepak.singhi@campus.edu')" class="text-[10px] px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer">deepak.singhi</button>
+              <button type="button" onclick="fillLoginEmail('sougata@campus.edu')" class="text-[10px] px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer">sougata</button>
+              <button type="button" onclick="fillLoginEmail('pragyan@campus.edu')" class="text-[10px] px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer">pragyan</button>
+              <button type="button" onclick="fillLoginEmail('r.sharma@campus.edu')" class="text-[10px] px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer">r.sharma</button>
+            </div>
+          </div>
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <label class="block text-xs font-bold text-slate-700">Password / SSO Passkey</label>
+              <span class="text-[10px] text-slate-400">Demo password: <code class="bg-slate-100 px-1 py-0.5 rounded text-indigo-600 font-mono">campus123</code></span>
+            </div>
+            <input type="password" id="loginPassword" required placeholder="••••••••" value="campus123"
+                   class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+          </div>
+          <button type="submit" class="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow-sm transition-all cursor-pointer">
+            Sign In to Campus Account
+          </button>
+        </form>
+      </div>
+
+      <!-- Tab 3: Register New Campus User -->
+      <div id="auth-panel-register" class="hidden space-y-3">
+        <form id="registerForm" onsubmit="handleCustomRegister(event)" class="space-y-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Full Name</label>
+            <input type="text" id="regName" required placeholder="e.g. Alex Chen" 
+                   class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Campus Email</label>
+              <input type="email" id="regEmail" required placeholder="alex@campus.edu" 
+                     class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Primary Role</label>
+              <select id="regRole" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white">
+                <option value="user">Student Researcher</option>
+                <option value="trusted">Graduate Maker</option>
+                <option value="manager">Lab Safety Officer</option>
+                <option value="owner">Faculty Equipment Custodian</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Create Password</label>
+            <input type="password" id="regPassword" required placeholder="••••••••" value="campus123"
+                   class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+          </div>
+          <button type="submit" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-sm transition-all cursor-pointer">
+            Create Profile & Collect 100 Starter Credits
+          </button>
+        </form>
+      </div>
+
+      <!-- Footer Help -->
+      <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
+        <span>Instant vice-versa persona switching supported during judging.</span>
+        <button onclick="closeLoginModal()" class="text-slate-600 hover:text-slate-900 font-semibold cursor-pointer">Close</button>
       </div>
 
     </div>
@@ -898,20 +1109,26 @@
   <div class="fixed bottom-3 left-1/2 -translate-x-1/2 w-[95%] max-w-4xl z-40 bg-slate-900/95 backdrop-blur-md text-white rounded-2xl border border-slate-700/80 shadow-2xl p-3 sm:p-4 transition-all">
     <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
       
-      <!-- Persona Switcher -->
-      <div class="flex items-center space-x-2 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
+      <!-- Persona Switcher with Vice-Versa Demo Login -->
+      <div class="flex items-center space-x-1.5 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
         <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mr-1 flex-shrink-0">Persona:</span>
-        <button onclick="setPersona('deepak')" id="btn-p-deepak" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-indigo-600 text-white whitespace-nowrap shadow-sm cursor-pointer">
+        <button onclick="loginAsPersona('deepak')" id="btn-p-deepak" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-indigo-600 text-white whitespace-nowrap shadow-sm cursor-pointer">
           Deepak (Lead)
         </button>
-        <button onclick="setPersona('sougata')" id="btn-p-sougata" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 whitespace-nowrap cursor-pointer">
+        <button onclick="loginAsPersona('sougata')" id="btn-p-sougata" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 whitespace-nowrap cursor-pointer">
           Sougata (Trusted)
         </button>
-        <button onclick="setPersona('pragyan')" id="btn-p-pragyan" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 whitespace-nowrap cursor-pointer">
+        <button onclick="loginAsPersona('pragyan')" id="btn-p-pragyan" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 whitespace-nowrap cursor-pointer">
           Pragyan (Safety)
         </button>
-        <button onclick="setPersona('sharma')" id="btn-p-sharma" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 whitespace-nowrap cursor-pointer">
+        <button onclick="loginAsPersona('sharma')" id="btn-p-sharma" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 whitespace-nowrap cursor-pointer">
           Prof. Sharma (Owner)
+        </button>
+        <button onclick="continueAsGuest()" id="btn-p-guest" class="px-2 py-1 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 whitespace-nowrap cursor-pointer">
+          Guest
+        </button>
+        <button onclick="openLoginModal()" title="Open Full Login & Persona Switcher" class="px-2 py-1 rounded-lg bg-indigo-500/30 hover:bg-indigo-500/50 text-indigo-200 text-xs font-bold whitespace-nowrap cursor-pointer">
+          Login ▾
         </button>
       </div>
 
@@ -1145,6 +1362,7 @@
 
     const APP_STATE = {
       activeView: 'discover',
+      isGuest: false,
       currentPersonaKey: 'deepak',
       currentProfileTab: 'history',
       currentDiffAngle: 'bed',
@@ -1349,25 +1567,52 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // --- PERSONA SWITCHER ---
-    async function setPersona(personaKey) {
-      // Map aliases
-      if (personaKey === 'arjun') personaKey = 'deepak';
-      if (personaKey === 'priya') personaKey = 'sougata';
-      if (personaKey === 'mehta') personaKey = 'pragyan';
+    // --- AUTHENTICATION & VICE-VERSA DEMO SWITCHER ---
+    function updateHeaderAuth() {
+      const headerArea = document.getElementById('headerAuthArea');
+      if (!headerArea) return;
 
-      APP_STATE.currentPersonaKey = personaKey;
-      const p = APP_STATE.personas[personaKey] || APP_STATE.personas.deepak;
-      
-      document.getElementById('userBadgeName').innerText = p.name;
-      document.getElementById('userBadgeRole').innerText = p.role;
-      document.getElementById('userAvatar').innerHTML = `${p.initials}<span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-white"></span>`;
+      if (APP_STATE.isGuest) {
+        headerArea.innerHTML = `
+          <div class="flex items-center space-x-2">
+            <span class="hidden sm:inline-flex items-center px-2 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200">
+              <span class="w-1.5 h-1.5 rounded-full bg-slate-400 mr-1.5"></span> Guest Mode
+            </span>
+            <button onclick="openLoginModal()" class="px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm shadow-sm hover:shadow-md transition-all flex items-center space-x-1.5 cursor-pointer">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/></svg>
+              <span>Sign In / Demo Login</span>
+            </button>
+          </div>
+        `;
+      } else {
+        const p = APP_STATE.personas[APP_STATE.currentPersonaKey] || APP_STATE.personas.deepak;
+        headerArea.innerHTML = `
+          <div class="flex items-center space-x-2">
+            <div onclick="openProfileHistoryModal()" title="Click to view your Automated Custody History, Credits & Badges" 
+                 class="flex items-center space-x-3 flex-shrink-0 cursor-pointer p-1.5 pr-2.5 rounded-xl hover:bg-indigo-50/80 border border-slate-200/80 hover:border-indigo-300 transition-all group shadow-2xs">
+              <div class="text-right hidden sm:block">
+                <div id="userBadgeName" class="text-xs font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">${p.name}</div>
+                <div id="userBadgeRole" class="text-[10px] text-indigo-600 font-semibold uppercase tracking-wider">${p.role}</div>
+              </div>
+              <div id="userAvatar" class="w-9 h-9 rounded-full bg-gradient-to-tr from-indigo-600 to-purple-600 text-white font-bold text-xs sm:text-sm flex items-center justify-center border-2 border-white shadow-sm ring-2 ring-indigo-200 relative group-hover:scale-105 transition-transform">
+                ${p.initials}
+                <span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-white"></span>
+              </div>
+            </div>
+            <button onclick="openLoginModal()" title="Switch Persona / Account" class="hidden sm:flex px-2 py-1.5 rounded-xl border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50 text-slate-600 hover:text-indigo-600 text-xs font-semibold items-center space-x-1 cursor-pointer transition-colors">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+              <span>Switch</span>
+            </button>
+          </div>
+        `;
+      }
+    }
 
-      // Update toolbar buttons
+    function updateToolbarButtons() {
       ['deepak', 'sougata', 'pragyan', 'sharma'].forEach(k => {
         const btn = document.getElementById('btn-p-' + k);
         if (btn) {
-          if (k === personaKey) {
+          if (!APP_STATE.isGuest && k === APP_STATE.currentPersonaKey) {
             btn.className = "px-2.5 py-1 rounded-lg text-xs font-semibold bg-indigo-600 text-white whitespace-nowrap shadow-sm cursor-pointer";
           } else {
             btn.className = "px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 whitespace-nowrap cursor-pointer";
@@ -1376,7 +1621,7 @@
 
         const pill = document.getElementById('p-pill-' + k);
         if (pill) {
-          if (k === personaKey) {
+          if (!APP_STATE.isGuest && k === APP_STATE.currentPersonaKey) {
             pill.className = "px-2.5 py-1 rounded-lg text-xs font-semibold bg-indigo-600 text-white cursor-pointer shadow-xs";
           } else {
             pill.className = "px-2.5 py-1 rounded-lg text-xs font-semibold bg-white hover:bg-slate-200 text-slate-700 border border-slate-200 cursor-pointer";
@@ -1384,7 +1629,29 @@
         }
       });
 
-      // Synchronize with backend API if running
+      const guestBtn = document.getElementById('btn-p-guest');
+      if (guestBtn) {
+        if (APP_STATE.isGuest) {
+          guestBtn.className = "px-2 py-1 rounded-lg text-xs font-semibold bg-indigo-600 text-white whitespace-nowrap shadow-sm cursor-pointer";
+        } else {
+          guestBtn.className = "px-2 py-1 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 whitespace-nowrap cursor-pointer";
+        }
+      }
+    }
+
+    async function setPersona(personaKey) {
+      if (personaKey === 'arjun') personaKey = 'deepak';
+      if (personaKey === 'priya') personaKey = 'sougata';
+      if (personaKey === 'mehta') personaKey = 'pragyan';
+
+      APP_STATE.isGuest = false;
+      APP_STATE.currentPersonaKey = personaKey;
+      localStorage.setItem('campus_auth_session', personaKey);
+      const p = APP_STATE.personas[personaKey] || APP_STATE.personas.deepak;
+      
+      updateHeaderAuth();
+      updateToolbarButtons();
+
       try {
         fetch('/auth/persona', {
           method: 'POST',
@@ -1396,11 +1663,168 @@
       renderDetailEligibility();
       renderCatalog();
       renderProfileModalContent();
-      showToast(`Active profile: ${p.name} (${p.role})`, 'success');
+    }
+
+    async function loginAsPersona(personaKey) {
+      await setPersona(personaKey);
+      closeLoginModal();
+      const p = APP_STATE.personas[personaKey] || APP_STATE.personas.deepak;
+      showToast(`Signed in as ${p.name} (${p.role})`, 'success');
+      try {
+        fetch('/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ persona: personaKey })
+        }).catch(() => {});
+      } catch (e) {}
+    }
+
+    async function continueAsGuest() {
+      APP_STATE.isGuest = true;
+      APP_STATE.currentPersonaKey = 'guest';
+      localStorage.setItem('campus_auth_session', 'guest');
+      closeLoginModal();
+      closeProfileHistoryModal();
+      updateHeaderAuth();
+      updateToolbarButtons();
+      renderDetailEligibility();
+      try {
+        fetch('/auth/logout', { method: 'POST' }).catch(() => {});
+      } catch (e) {}
+      showToast('Switched to Guest Mode. Equipment browsing active; login required for booking.', 'info');
+    }
+
+    function openLoginModal(tab = 'demo') {
+      const modal = document.getElementById('loginModal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        switchAuthTab(tab);
+      }
+    }
+
+    function closeLoginModal() {
+      const modal = document.getElementById('loginModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function switchAuthTab(tab) {
+      ['demo', 'custom', 'register'].forEach(t => {
+        const btn = document.getElementById('auth-tab-' + t);
+        const panel = document.getElementById('auth-panel-' + t);
+        if (btn) {
+          if (t === tab) {
+            btn.className = "px-3.5 py-1.5 rounded-lg text-xs font-bold bg-indigo-600 text-white cursor-pointer shadow-xs transition-all flex items-center space-x-1.5";
+          } else {
+            btn.className = "px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-600 bg-white hover:bg-slate-100 border border-slate-200 cursor-pointer transition-all flex items-center space-x-1.5";
+          }
+        }
+        if (panel) {
+          if (t === tab) panel.classList.remove('hidden');
+          else panel.classList.add('hidden');
+        }
+      });
+    }
+
+    function fillLoginEmail(email) {
+      const inp = document.getElementById('loginEmail');
+      if (inp) inp.value = email;
+    }
+
+    async function handleCustomLogin(event) {
+      if (event) event.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      const pass = document.getElementById('loginPassword').value.trim();
+      if (!email) return;
+
+      const emailLower = email.toLowerCase();
+      let matchedPersona = 'deepak';
+      if (emailLower.includes('sougata')) matchedPersona = 'sougata';
+      else if (emailLower.includes('pragyan')) matchedPersona = 'pragyan';
+      else if (emailLower.includes('sharma')) matchedPersona = 'sharma';
+      else if (emailLower.includes('deepak')) matchedPersona = 'deepak';
+      else {
+        const customKey = 'cust_' + emailLower.replace(/[^a-z0-9]/g, '');
+        const customName = email.split('@')[0].replace(/[\._]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        const initials = customName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'CU';
+        APP_STATE.personas[customKey] = {
+          id: 'usr-' + customKey,
+          name: customName,
+          role: 'Researcher • Standard Tier',
+          initials: initials,
+          certifications: ['LAB_SAFETY_101'],
+          credits: 100,
+          hoursPast30d: 0.0,
+          history: [],
+          ledger: [
+            { delta: '+100', reason: 'Campus Onboarding Research Grant', date: 'Just now', balance: 100 }
+          ]
+        };
+        matchedPersona = customKey;
+      }
+
+      APP_STATE.isGuest = false;
+      await setPersona(matchedPersona);
+      closeLoginModal();
+      showToast(`Welcome back, ${APP_STATE.personas[matchedPersona].name}!`, 'success');
+
+      try {
+        fetch('/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password: pass })
+        }).catch(() => {});
+      } catch (e) {}
+    }
+
+    async function handleCustomRegister(event) {
+      if (event) event.preventDefault();
+      const name = document.getElementById('regName').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const role = document.getElementById('regRole').value;
+      const pass = document.getElementById('regPassword').value.trim();
+      if (!name || !email) return;
+
+      const customKey = 'cust_' + email.toLowerCase().replace(/[^a-z0-9]/g, '');
+      const initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'CU';
+      let roleLabel = 'Student Researcher • Standard Tier';
+      if (role === 'trusted') roleLabel = 'Graduate Maker • Tier 3';
+      else if (role === 'manager') roleLabel = 'Lab Safety Officer & Manager';
+      else if (role === 'owner') roleLabel = 'Faculty Equipment Custodian';
+
+      APP_STATE.personas[customKey] = {
+        id: 'usr-' + customKey,
+        name: name,
+        role: roleLabel,
+        initials: initials,
+        certifications: ['LAB_SAFETY_101'],
+        credits: 100,
+        hoursPast30d: 0.0,
+        history: [],
+        ledger: [
+          { delta: '+100', reason: 'Campus Onboarding Research Grant', date: 'Just now', balance: 100 }
+        ]
+      };
+
+      APP_STATE.isGuest = false;
+      await setPersona(customKey);
+      closeLoginModal();
+      showToast(`Account created! Welcome, ${name}. 100 research credits granted.`, 'success');
+
+      try {
+        fetch('/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, role, password: pass })
+        }).catch(() => {});
+      } catch (e) {}
     }
 
     // --- AUTOMATED PROFILE & CUSTODY HISTORY MODAL ENGINE ---
     function openProfileHistoryModal() {
+      if (APP_STATE.isGuest) {
+        openLoginModal();
+        return;
+      }
       const modal = document.getElementById('profileHistoryModal');
       renderProfileModalContent();
       modal.classList.remove('hidden');
@@ -1615,13 +2039,44 @@
     }
 
     function renderDetailEligibility() {
-      const p = APP_STATE.personas[APP_STATE.currentPersonaKey] || APP_STATE.personas.deepak;
-      const hasLaser = p.certifications.includes('LASER_SAFETY_SOP') || p.certifications.includes('ALL_PERMISSIONS');
-      
       const pill = document.getElementById('eligibilitySummaryPill');
       const sub = document.getElementById('eligibilitySubtext');
       const dagNode = document.getElementById('dagNodeLaser');
       const btnRem = document.getElementById('btnRemediationSlot');
+      const btnRequest = document.getElementById('btnRequestBooking');
+
+      if (APP_STATE.isGuest) {
+        pill.innerHTML = `
+          <div onclick="openLoginModal()" class="flex items-center space-x-2 cursor-pointer hover:underline">
+            <svg class="w-5 h-5 text-indigo-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            <span class="text-indigo-700 font-bold">Sign In Required to Verify Credentials</span>
+          </div>
+        `;
+        sub.innerHTML = `You are browsing in guest mode. <button onclick="openLoginModal()" class="font-bold text-indigo-600 hover:text-indigo-800 underline cursor-pointer">Sign in or select a demo persona</button> to evaluate prerequisite DAGs.`;
+        dagNode.className = "w-40 p-3 rounded-xl bg-slate-50 border-2 border-slate-300 shadow-sm text-center relative cursor-pointer hover:border-indigo-400";
+        dagNode.onclick = () => openLoginModal();
+        dagNode.innerHTML = `
+          <span class="absolute -top-2 -right-2 px-1.5 py-0.5 bg-slate-500 text-white text-[9px] font-bold rounded-full uppercase">Locked</span>
+          <div class="w-6 h-6 rounded-full bg-slate-200 text-slate-700 mx-auto flex items-center justify-center text-xs font-bold mb-1.5">🔒</div>
+          <div class="text-xs font-bold text-slate-900">Laser Safety SOP</div>
+          <div class="text-[10px] text-slate-500 mt-0.5">Sign in to check</div>
+        `;
+        if (btnRem) btnRem.classList.add('hidden');
+        if (btnRequest) {
+          btnRequest.innerHTML = `
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/></svg>
+            <span>Sign In / Demo Login to Request</span>
+          `;
+        }
+        return;
+      }
+
+      if (btnRequest) {
+        btnRequest.innerHTML = `<span>Request Booking Slot</span>`;
+      }
+
+      const p = APP_STATE.personas[APP_STATE.currentPersonaKey] || APP_STATE.personas.deepak;
+      const hasLaser = p.certifications.includes('LASER_SAFETY_SOP') || p.certifications.includes('ALL_PERMISSIONS');
 
       if (hasLaser) {
         pill.innerHTML = `
@@ -1637,7 +2092,7 @@
           <div class="text-xs font-bold text-slate-900">Laser Safety SOP</div>
           <div class="text-[10px] text-emerald-600 font-semibold mt-0.5">Verified Badge</div>
         `;
-        btnRem.classList.add('hidden');
+        if (btnRem) btnRem.classList.add('hidden');
       } else {
         pill.innerHTML = `
           <div onclick="openTrainingModal('LASER_SAFETY_SOP')" class="flex items-center space-x-2 cursor-pointer hover:underline">
@@ -1654,7 +2109,7 @@
           <div class="text-xs font-bold text-slate-900">Laser Safety SOP</div>
           <div class="text-[10px] text-amber-600 font-semibold mt-0.5">Click to Resolve &rarr;</div>
         `;
-        btnRem.classList.remove('hidden');
+        if (btnRem) btnRem.classList.remove('hidden');
       }
     }
 
@@ -1733,6 +2188,11 @@
 
     // --- BOOKING MODAL & SUBMISSION ---
     function openBookingModal() {
+      if (APP_STATE.isGuest) {
+        showToast("Authentication required. Please sign in or select a demo persona to request a slot.", "error");
+        openLoginModal();
+        return;
+      }
       document.getElementById('bookingModal').classList.remove('hidden');
     }
 
@@ -1741,6 +2201,11 @@
     }
 
     async function submitBookingRequest() {
+      if (APP_STATE.isGuest) {
+        showToast("Authentication required. Please sign in to submit booking requests.", "error");
+        openLoginModal();
+        return;
+      }
       closeBookingModal();
       try {
         const resp = await fetch('/bookings', {
@@ -1774,6 +2239,11 @@
     }
 
     async function completeCheckin() {
+      if (APP_STATE.isGuest) {
+        showToast("Authentication required. Please sign in or select a demo persona to verify check-in.", "error");
+        openLoginModal();
+        return;
+      }
       try {
         await fetch('/bookings/CS-2026-8891/checkin', {
           method: 'POST',
@@ -1781,7 +2251,7 @@
           body: JSON.stringify({ checklist: { ppe: true, fumeVent: true, cleanBed: true } })
         });
       } catch (e) {}
-      showToast("Check-in Verified! Tool interlock unlocked. Custody transferred to Deepak Singhi.", "success");
+      showToast("Check-in Verified! Tool interlock unlocked. Custody transferred to " + (APP_STATE.personas[APP_STATE.currentPersonaKey] || { name: 'Deepak Singhi' }).name + ".", "success");
       switchView('checkout');
     }
 
@@ -2111,7 +2581,13 @@
       renderCatalog();
       renderHeatmap();
       renderAuditTable();
-      setPersona('deepak');
+
+      const saved = localStorage.getItem('campus_auth_session') || 'deepak';
+      if (saved === 'guest') {
+        continueAsGuest();
+      } else {
+        setPersona(saved);
+      }
     };
   </script>
 </body>
