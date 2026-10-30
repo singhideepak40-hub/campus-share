@@ -169,9 +169,9 @@ const server = http.createServer(async (req, res) => {
         const emailLower = (body.email || '').trim().toLowerCase();
         let matched = campusDb.memoryStore.profiles.find(p => p.email.toLowerCase() === emailLower);
         if (!matched) {
-          if (emailLower.includes('deepak')) matched = campusDb.memoryStore.profiles.find(p => p.id === 'usr-deepak');
-          else if (emailLower.includes('sougata')) matched = campusDb.memoryStore.profiles.find(p => p.id === 'usr-sougata');
-          else if (emailLower.includes('pragyan')) matched = campusDb.memoryStore.profiles.find(p => p.id === 'usr-pragyan');
+          if (emailLower.includes('deepak') || emailLower.includes('singhi')) matched = campusDb.memoryStore.profiles.find(p => p.id === 'usr-deepak');
+          else if (emailLower.includes('sougata') || emailLower.includes('mandal')) matched = campusDb.memoryStore.profiles.find(p => p.id === 'usr-sougata');
+          else if (emailLower.includes('pragyan') || emailLower.includes('talukdar')) matched = campusDb.memoryStore.profiles.find(p => p.id === 'usr-pragyan');
           else if (emailLower.includes('sharma')) matched = campusDb.memoryStore.profiles.find(p => p.id === 'usr-sharma');
         }
 

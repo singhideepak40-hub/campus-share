@@ -143,8 +143,8 @@ node src/server.js
 
 ### Pre-Configured Team Personas & Profiles:
 1. **Deepak Singhi (`deepak`):** Lead Researcher • Tier 2 (Standard). Demonstrates interactive DAG prerequisite resolution, booking submission, and custody transfer.
-2. **Sougata (`sougata`):** Robotics & Prototyping Lead • Tier 3 (Trusted). Holds full fabrication certifications (`CNC_CERT`, `LASER_SAFETY_SOP`). Demonstrates rapid slot dispatch.
-3. **Pragyan (`pragyan`):** Campus Safety Custodian & Manager. Demonstrates incident arbitration, safety holds, and audit integrity verification.
+2. **Sougata Mandal (`sougata`):** Robotics & Prototyping Lead • Tier 3 (Trusted). Holds full fabrication certifications (`CNC_CERT`, `LASER_SAFETY_SOP`). Demonstrates rapid slot dispatch.
+3. **Pragyan Talukdar (`pragyan`):** Campus Safety Custodian & Manager. Demonstrates incident arbitration, safety holds, and audit integrity verification.
 4. **Prof. R. Sharma (`sharma`):** Resource Owner (MakerWing Custodian). Demonstrates owner analytics, heatmaps, and 1-click slot publishing.
 
 ### Fast-Forward Interactive Triggers:
@@ -158,8 +158,8 @@ node src/server.js
 ## 7. Team & Participant Details
 
 - **Deepak Singhi**: Lead Architect & Backend Core — Orchestrated the Booking Spine, database schema, REST API server, and cryptographic audit chains.
-- **Sougata**: Full-Stack Developer & Algorithmic Lead — Engineered the multi-variable fair-share priority scoring, Mulberry32 PRNG, and interactive UI diffing engine.
-- **Pragyan**: Systems Compliance & Safety Auditor — Designed the prerequisite DAG traversal, EHS safety checklists, state machine invariants, and rule-based anomaly detection.
+- **Sougata Mandal**: Full-Stack Developer & Algorithmic Lead — Engineered the multi-variable fair-share priority scoring, Mulberry32 PRNG, and interactive UI diffing engine.
+- **Pragyan Talukdar**: Systems Compliance & Safety Auditor — Designed the prerequisite DAG traversal, EHS safety checklists, state machine invariants, and rule-based anomaly detection.
 - **Prof. R. Sharma**: Faculty Advisor & Custodian Lead — Institutional resource modeling and MakerWing facility specifications.
 
 ---

@@ -110,8 +110,8 @@ class CampusDatabase {
       },
       {
         id: 'usr-sougata',
-        name: 'Sougata',
-        email: 'sougata@campus.edu',
+        name: 'Sougata Mandal',
+        email: 'sougata.mandal@campus.edu',
         role: 'user',
         trust_tier: 'trusted',
         credits_balance: 180,
@@ -120,8 +120,8 @@ class CampusDatabase {
       },
       {
         id: 'usr-pragyan',
-        name: 'Pragyan',
-        email: 'pragyan@campus.edu',
+        name: 'Pragyan Talukdar',
+        email: 'pragyan.talukdar@campus.edu',
         role: 'manager',
         trust_tier: 'trusted',
         credits_balance: 450,
@@ -385,7 +385,7 @@ class CampusDatabase {
         resource_name: 'Haas Mini Mill 5-Axis CNC Center',
         location: 'Precision Machine Shop Bay 1',
         user_id: 'usr-sougata',
-        user_name: 'Sougata',
+        user_name: 'Sougata Mandal',
         start_at: new Date(now.getTime() - 1 * 86400000).toISOString(),
         end_at: new Date(now.getTime() - 1 * 86400000 + 10800000).toISOString(),
         purpose: 'Custom aluminum 6061 planetary gearbox carrier machining',
@@ -400,7 +400,7 @@ class CampusDatabase {
         resource_name: 'Formlabs Form 3+ SLA Printer',
         location: 'Rapid Prototyping Bay 2',
         user_id: 'usr-sougata',
-        user_name: 'Sougata',
+        user_name: 'Sougata Mandal',
         start_at: new Date(now.getTime() - 5 * 86400000).toISOString(),
         end_at: new Date(now.getTime() - 5 * 86400000 + 21600000).toISOString(),
         purpose: 'Biocompatible dental resin manifold prototype',
@@ -474,7 +474,7 @@ class CampusDatabase {
       {
         id: 'wl-1',
         booking_id: 'CS-2026-8891',
-        candidate_name: 'Sougata',
+        candidate_name: 'Sougata Mandal',
         candidate_id: 'usr-sougata',
         position: 1,
         priority_score: 64.2,
@@ -506,7 +506,7 @@ class CampusDatabase {
     appendAuditBlock(this.memoryStore.auditChain, {
       booking_id: 'CS-2026-8891',
       actor_id: 'usr-pragyan',
-      actor_name: 'Pragyan',
+      actor_name: 'Pragyan Talukdar',
       action: 'REQUEST_APPROVED',
       payload: { priority_score: 78.4, dispatchRule: 'Fair-Share Algorithm v2' },
       timestamp: '2026-10-30T11:05:22.000Z'
@@ -514,8 +514,8 @@ class CampusDatabase {
 
     appendAuditBlock(this.memoryStore.auditChain, {
       booking_id: 'CS-2026-8891',
-      actor_id: 'usr-deepak',
-      actor_name: 'Deepak Singhi',
+      actor_id: 'usr-sougata',
+      actor_name: 'Sougata Mandal',
       action: 'CHECKIN_COMPLETED',
       payload: { hmac_token_valid: true, checklist_items_passed: 3, photos_anchored: 3 },
       timestamp: '2026-10-30T14:02:18.000Z'
@@ -528,8 +528,8 @@ class CampusDatabase {
         booking_id: 'CS-2026-8891',
         phase: 'checkin',
         checklist_done: { ppe: true, fumeVent: true, cleanBed: true },
-        notes: 'Pristine baseline captured by Deepak Singhi. Fume exhaust pressure optimal.',
-        created_by: 'usr-deepak',
+        notes: 'Pristine baseline captured by Sougata Mandal. Fume exhaust pressure optimal.',
+        created_by: 'usr-sougata',
         created_at: '2026-10-30T14:02:18.000Z',
         photos: [
           { angle: 'Front Panel', sha256: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855' },
